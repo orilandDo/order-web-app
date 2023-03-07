@@ -1,0 +1,42 @@
+<div id="login-container" class="flex container mx-auto items-center justify-center">
+    <div class="w-full max-w-xs login-body">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 login-form">
+            <img src="../../assets/images/logo.png" class="logo" />
+            <div class="mb-4 row field">
+                <label class="text-label text-sm font-bold mb-2 col-5" for="username">
+                    {{'LOGIN.USERNAME' | translate}}
+                </label>
+                <input
+                    class="col-7 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="username" type="text" placeholder="Tên đăng nhập" (keyup)="onKey($event, 'username')"
+                    maxlength="50" [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
+                <p *ngIf="!isUsernameValid" class="text-red-500 text-xs italic">{{'VALIDATE.USERNAME' | translate}}</p>
+            </div>
+            <div class="mb-6 row field">
+                <label class="text-label text-sm font-bold mb-2 col-5" for="password">
+                    {{'LOGIN.PASSWORD' | translate}}
+                </label>
+                <input
+                    class="col-7 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                    id="password" type="password" placeholder="******************" (keyup)="onKey($event, 'password')"
+                    maxlength="50" [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="flex items-center justify-between">
+                <button
+                    class="btn-login py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button" (click)="onSubmit()">
+                    {{'BUTTON.LOGIN' | translate}}
+                </button>
+                <!-- <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                    Forgot Password?
+                </a> -->
+            </div>
+            <div *ngIf="error || (error !== null && error.length > 0)" class="notification">
+                <span>{{error}}</span>
+            </div>
+        </form>
+        <p class="text-center text-xs footer">
+            &copy;{{'COPY_RIGHT' | translate}}
+        </p>
+    </div>
+</div>

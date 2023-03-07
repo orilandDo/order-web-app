@@ -1,0 +1,108 @@
+.container {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: 100%;
+
+    .p-top {
+        padding-top: 1rem;
+    }
+
+    .field {
+        padding-right: 1.5rem;
+        padding-left: 8px;
+        width: 100%;
+    }
+
+    .text-label {
+        text-align: left;
+        align-self: center;
+        font-weight: 700;
+        padding-left: 8px;
+    }
+
+    .require {
+        color: red;
+        margin-left: 0.25rem;
+    }
+
+    .btn-container {
+        text-align: right;
+        padding-bottom: 5rem;
+        padding-right: 1.5rem;
+
+        .btn-save {
+            width: 8rem;
+            min-width: 8rem;
+            color: white;
+            background-color: royalblue;
+            border-color: royalblue;
+            margin-left: 1rem;
+            margin-right: 2rem;
+        }
+
+        .btn-cancel {
+            width: 8rem;
+            min-width: 8rem;
+            color: black;
+            background-color: #dadada;
+            border-color: #dadada;
+        }
+
+    }
+
+    .mat-select {
+        margin-top: 0.625rem;
+    }
+
+    mat-hint {
+        display: none !important;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+        display: none !important;
+    }
+
+    .header {
+        text-align: center;
+        padding: 1.5rem 0;
+    }
+
+    .created-date {
+        display: block;
+        font-weight: 500;
+        padding-left: 1rem;
+    }
+
+    .custom-div {
+        padding-left: 0px;
+        padding-bottom: 4px;
+        display: flex;
+    }
+
+    select {
+        width: 50% !important;
+    }
+
+    mat-radio-button {
+        margin-right: 8px;
+    }
+
+    .margin {
+        margin-left: 8px;
+        margin-bottom: 4px;
+    }
+
+    mat-dialog-content {
+        span {
+            justify-content: end;
+            display: flex;
+            padding-right: 3rem;
+        }
+    }
+
+    .label-ton {
+        justify-content: start !important;
+        padding-left: 8px;
+        margin: auto 0;
+    }
+}

@@ -1,0 +1,89 @@
+.container {
+    padding: 1.5rem;
+    margin: 0 !important;
+    min-width: 100vh;
+    width: 100vh;
+
+    .margin {
+        margin-left: 8px;
+    }
+
+    .p-bottom {
+        padding-bottom: 1rem;
+    }
+
+    .field {
+        padding-right: 1.5rem;
+        width: 100%;
+    }
+
+    .header {
+        text-align: center;
+        padding-bottom: 1.5rem;
+    }
+
+    .text-label {
+        text-align: left;
+        align-self: center;
+        font-weight: 700;
+        padding-left: 8px;
+    }
+
+    .mat-select {
+        margin-top: 0.625rem;
+    }
+
+    mat-hint {
+        display: none !important;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+        display: none !important;
+    }
+
+    .header {
+        text-align: center;
+        padding: 1.5rem 0;
+    }
+
+    .created-date {
+        display: block;
+        font-weight: 500;
+        padding-left: 1rem;
+    }
+
+    .mat-mdc-dialog-actions {
+        justify-content: end;
+        margin-right: 1.5rem;
+    }
+
+    .btn-save {
+        color: white;
+        background-color: royalblue;
+        border-color: royalblue;
+    }
+
+    .btn-cancel {
+        color: black;
+        background-color: #dadada;
+        border-color: #dadada;
+    }
+
+    .custom-div {
+        padding-left: 0px;
+        padding-bottom: 4px;
+    }
+
+    mat-dialog-content {
+        span {
+            justify-content: end;
+            display: flex;
+            padding-right: 3rem;
+        }
+    }
+
+    mat-radio-button{
+        margin-right: 16px;
+    }
+
+}

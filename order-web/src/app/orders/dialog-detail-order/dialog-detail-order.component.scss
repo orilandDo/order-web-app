@@ -1,0 +1,108 @@
+.container {
+    padding: 1.5rem;
+    margin: 0 !important;
+    min-width: 100vh;
+    width: 100vh;
+
+    .p-bottom {
+        padding-bottom: 1rem;
+    }
+
+    .field {
+        padding-right: 1.5rem;
+        width: 100%;
+    }
+
+    .header {
+        text-align: center;
+        padding-bottom: 1.5rem;
+    }
+
+    .require {
+        color: red;
+        margin-left: 0.25rem;
+    }
+
+    .text-label {
+        text-align: left;
+        align-self: center;
+        font-weight: 700;
+        padding-left: 8px;
+    }
+
+    .mat-select {
+        margin-top: 0.625rem;
+    }
+
+    mat-hint {
+        display: none !important;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+        display: none !important;
+    }
+
+    .header {
+        text-align: center;
+        padding: 1.5rem 0;
+    }
+
+    .mat-mdc-dialog-actions {
+        justify-content: end;
+        margin-right: 1.5rem;
+    }
+
+    .btn-save {
+        color: white;
+        background-color: royalblue;
+        border-color: royalblue;
+    }
+
+    .btn-cancel {
+        color: black;
+        background-color: #dadada;
+        border-color: #dadada;
+        margin-right: 1rem;
+    }
+
+    .btn-export {
+        color: white;
+        background-color: brown;
+        border-color: brown;
+        margin-right: 1rem;
+    }
+
+    .margin {
+        margin-left: 8px;
+        margin-bottom: 4px;
+    }
+
+    mat-radio-button{
+        margin-right: 16px;
+    }
+
+    select {
+        width: 58% !important;
+    }
+
+    .custom-div {
+        padding-left: 0px;
+        padding-bottom: 4px;
+        display: flex;
+    }
+
+    mat-dialog-content {
+        span {
+            justify-content: end;
+            display: flex;
+            padding-right: 3rem;
+        }
+    }
+
+    .label-ton {
+        justify-content: start !important;
+        padding-left: 8px;
+        margin: auto 0;
+    }
+
+}

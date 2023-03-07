@@ -1,0 +1,107 @@
+{
+    "TITLE_APP": "Công ty CP XM Hà Tiên",
+    "COPY_RIGHT": "2023 Ha Tien 1 cement joint stock company. All rights reserved.",
+    "LOGIN": {
+        "TITLE": "Đăng nhập",
+        "USERNAME": "Tên đăng nhập",
+        "PASSWORD": "Mật khẩu"
+    },
+    "DASHBOARD": {
+        "MENU_TITLE": "Trang chủ"
+    },
+    "ORDER": {
+        "MENU_TITLE": "Đơn đặt hàng",
+        "TITLE_LIST": "Danh sách đơn đặt hàng",
+        "TITLE_ADD": "Thêm mới đơn hàng",
+        "TITLE_MODIFIED": "Cập nhật thông tin đơn hàng",
+        "TITLE_DETAIL": "Chi tiết đơn hàng",
+        "SEARCH_ID": "Mã số đơn hàng",
+        "ID": "Mã số \n đơn hàng",
+        "AGENCY": "Nhà phân phối",
+        "CONTRACT": "Hợp đồng",
+        "CREATEDDATE": "Ngày tạo đơn",
+        "SEARCH_RECEIVEDDATE": "Ngày nhận dự kiến",
+        "RECEIVEDDATE": "Ngày nhận \n dự kiến",
+        "LABEL_RECEIVEDDATE": "Ngày nhận \n dự kiến",
+        "STATUS": "Trạng thái đơn hàng",
+        "DELIVERY_ADDRESS": "Nơi nhận",
+        "PICKUP_ADDRESS": "Nơi giao",
+        "PRODUCT": "Sản phẩm",
+        "PRODUCT_TYPE": "Loại sản phẩm",
+        "QUANTITY": "Số lượng",
+        "TOTAL": "Tổng số \n lượng",
+        "LABEL_TOTAL": "Tổng số lượng",
+        "LICENSE_PLATE": "Số phương tiện",
+        "DRIVER": "Tên tài xế",
+        "CITY": "Tỉnh/Thành phố/Khu vực",
+        "TRANSPORT": "Phương tiện vận chuyển",
+        "SELECT_TRANSPORT": "Chọn phương tiện",
+        "NOTE": "Ghi chú",
+        "STATUS_WAITING": "Đang chờ",
+        "STATUS_RECEIVING": "Đang nhận",
+        "STATUS_RECEIVED": "Đã nhận",
+        "STATUS_CANCEL": "Hủy",
+        "LABEL_STATUS": "Chọn trạng thái",
+        "SELECT_AGENCY": "Chọn NPP",
+        "SELECT_PRODUCT": "Chọn sản phẩm"
+    },
+    "PRODUCT": {
+        "MENU_TITLE": "Sản phẩm",
+        "TITLE_LIST": "Danh sách sản phẩm",
+        "TITLE_ADD": "Thêm mới sản phẩm",
+        "TITLE_MODIFIED": "Cập nhật thông tin sản phẩm",
+        "ID": "Mã số",
+        "NAME": "Tên sản phẩm",
+        "QUANTITY_INVENTORY": "Số lượng tồn kho",
+        "QUANTITY_WAREHOUSE": "Số lượng nhập kho",
+        "PRICE": "Giá sản phẩm",
+        "NOTE": "Ghi chú"
+    },
+    "AGENCY": {
+        "MENU_TITLE": "Nhà phân phối",
+        "TITLE_LIST": "Danh sách nhà phân phối",
+        "TITLE_ADD": "Thêm mới nhà phân phối",
+        "TITLE_MODIFIED": "Cập nhật thông tin nhà phân phối",
+        "ID": "Mã số",
+        "NAME": "Tên NPP",
+        "PHONE": "Số điện thoại",
+        "EMAIL": "Email",
+        "ADDRESS": "Địa chỉ",
+        "CONTRACT": "Hợp đồng",
+        "USERNAME": "Tên đăng nhập",
+        "PASSWORD": "Mật khẩu",
+        "CONFIRM_PASSWORD": "Nhập lại mật khẩu",
+        "NOTE": "Ghi chú"
+    },
+    "LOGOUT": "Đăng xuất",
+    "BUTTON": {
+        "LOGIN": "Đăng nhập",
+        "ADD": "Thêm mới",
+        "SEARCH": "Tìm kiếm",
+        "CANCEL": "Hủy",
+        "SAVE": "Lưu",
+        "CLOSE": "Đóng",
+        "ORDER": "Đặt hàng",
+        "NO": "Không",
+        "YES": "Có",
+        "DOWNLOAD": "Tải xuống"
+    },
+    "DIALOG_DELETE": {
+        "TITLE": "Xác nhận xóa",
+        "MESSAGE": "Bạn có chắc chắn muốn xóa "
+    },
+    "VALIDATE": {
+        "USERNAME": "Username can consist of letters and numbers only!"
+    },
+    "MESSAGE" : {
+        "ADD_PRODUCT": "Thêm mới sản phẩm",
+        "MODIFIED_PRODUCT": "Cập nhật thông tin sản phẩm",
+        "ADD_AGENCY": "Thêm mới nhà phân phối",
+        "MODIFIED_AGENCY": "Cập nhật thông tin nhà phân phối",
+        "ADD_ORDER": "Thêm mới đơn hàng",
+        "MODIFIED_ORDER": "Cập nhật thông tin đơn hàng",
+        "DELETE_PRODUCT": "Xóa thông tin sản phẩm",
+        "DELETE_AGENCY": "Xóa thông tin nhà phân phối",
+        "DELETE_ORDER": "Xóa thông tin đơn đặt hàng"
+    }
+}

@@ -1,0 +1,68 @@
+#login-container {
+    min-height: 100vh;
+    min-width: 100vw;
+    color: white;
+    position: relative;
+    background-color: #e3e2e2;
+    //background-image: url('../../assets/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    .login-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .logo {
+        max-height: 8rem;
+        margin: auto;
+        margin: 2rem 0;
+    }
+
+    .notification {
+        // position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: red;
+        margin-top: 1rem;
+    }
+
+    .login-form {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 0.5rem !important;
+
+        .text-label {
+            color: grey;
+            margin: auto;
+            font-size: 18x;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .field {
+            padding: 0 0.5rem;
+        }
+
+        .btn-login {
+            color: white;
+            background-color: royalblue;
+            border-color: royalblue;
+            margin-bottom: 1rem;
+        }
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding-top: 20px;
+        //padding-bottom: 10px;
+        color: rgb(83, 83, 83);
+    }
+}

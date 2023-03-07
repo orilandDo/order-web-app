@@ -1,0 +1,11 @@
+<div id="app-login" [hidden]="isLoginSuccess">
+    <app-login></app-login>
+</div>
+<div id="app-body" [hidden]="!isLoginSuccess">
+    <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+    <app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth">
+    </app-body>
+    <div class="footer text-center text-xs">
+        &copy;{{'COPY_RIGHT' | translate}}
+    </div>
+</div>

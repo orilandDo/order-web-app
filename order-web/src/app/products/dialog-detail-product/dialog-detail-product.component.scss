@@ -1,0 +1,78 @@
+.container {
+    padding: 1.5rem 0;
+    margin: 0 !important;
+    min-width: 80vh;
+
+    .header {
+        text-align: center;
+        padding-bottom: 1.5rem;
+    }
+
+    .require {
+        color: red;
+        margin-left: 0.25rem;
+    }
+
+    .text-label {
+        text-align: left;
+        align-self: center;
+        font-weight: 500;
+        padding-left: 1rem;
+    }
+
+    // .btn-container {
+    //     text-align: right;
+
+    //     .btn-save {
+    //         width: 7rem;
+    //         min-width: 7rem;
+    //         color: white;
+    //         background-color: royalblue;
+    //         border-color: royalblue;
+    //         margin-left: 2rem;
+    //     }
+
+    //     .btn-cancel {
+    //         width: 7rem;
+    //         min-width: 7rem;
+    //         color: black;
+    //         background-color: #dadada;
+    //         border-color: #dadada;
+    //     }
+
+    // }
+
+    .mat-mdc-dialog-actions {
+        justify-content: end;
+        margin-right: 1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-save {
+        color: white;
+        background-color: royalblue;
+        border-color: royalblue;
+    }
+
+    .btn-cancel {
+        color: black;
+        background-color: #dadada;
+        border-color: #dadada;
+        margin-right: 1rem;
+    }
+
+    .field {
+        width: 100%;
+    }
+
+    .error {
+        color: red;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    mat-dialog-content {
+        min-height: 18rem;
+        height: 18rem;
+    }
+}
