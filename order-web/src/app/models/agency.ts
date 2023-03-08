@@ -6,8 +6,7 @@ export interface Agency {
     phone: string
     note: string;
     email: string;
-    // accountName: string,
-    // password: string,
+    accountName: string,
+    password: string,
     contract: string,
-    updatedDate?: string,
 }

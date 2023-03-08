@@ -5,6 +5,11 @@ import { CONFIG } from "../common/config";
 const httpOptions = {
     headers: new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
+        'Access-Control-Allow-Credentials': 'true'
     })
 };
 

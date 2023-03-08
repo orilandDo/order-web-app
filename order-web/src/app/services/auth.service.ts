@@ -71,14 +71,14 @@ export class AuthService {
 
     // getNewAccessToken() {
     //     return this.http.get(`${this.webService.baseUrl}/users/access-token`, {
-    //         headers: {
+    //         header: {
     //             'x-refresh-token': this.getRefreshToken(),
     //             '_id': this.getUserId()
     //         },
     //         observe: 'response'
     //     }).pipe(
     //         tap((res: HttpResponse<any>) => {
-    //             this.setAccessToken(res.headers.get('x-access-token'));
+    //             this.setAccessToken(res.header.get('x-access-token'));
     //         })
     //     )
     // }

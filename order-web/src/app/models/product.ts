@@ -4,6 +4,6 @@ export interface Product {
     quantity: number,
     price: number,
     note: string,
-    createDate?: string,
+    createdDate?: string,
     updatedDate?: string,
 }

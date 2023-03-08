@@ -9,6 +9,8 @@ import { DialogDeleteConfirmComponent } from '../common/dialog-delete-confirm/di
 import { AGENCY_DATA } from '../mock-data/agency-data';
 import { DialogDetailAgencyComponent } from './dialog-detail-agency/dialog-detail-agency.component';
 import { AgencyService } from '../services/agency.service';
+import { SERVICE_TYPE } from '../constants/const-data';
+import { Helper } from '../helpers/helper';
 
 @Component({
   selector: 'app-agency',
@@ -27,15 +29,29 @@ export class AgencyComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  helper = new Helper();
+
   constructor(public dialog: MatDialog,
     private agencyService: AgencyService,
-    ) { }
+  ) { }
 
   ngOnInit(): void {
-    // this.agencyService.getAgencytList().subscribe((response: any) => {
-    //   console.log(response)
-    //   this.dataSource.data = response;
-    // });
+    const agencyList = this.helper.getAgencyList();
+    const userList = this.helper.getUserList();
+    if (agencyList.length === 0) {
+      this.agencyService.getAgencyList().subscribe((response: any) => {
+        console.log(response)
+        this.dataSource.data = response.reverse();
+        this.dataSource.data.forEach(element => {
+          const user = userList.find(x => x.id === element.userId);
+          element.accountName = user ? user.username : '';
+          element.password = user ? user.password : '';
+        });
+        this.helper.setAgencyList(this.dataSource.data.reverse());
+      });
+    } else {
+      this.dataSource.data = agencyList.reverse();
+    }
   }
 
   ngAfterViewInit() {
@@ -60,7 +76,7 @@ export class AgencyComponent implements AfterViewInit, OnInit {
           row.contract = result.contract;
           row.password = result.password.length !== 0 ? result.password : row.password;
         } else {
-          this.dataSource.data.push(result);
+          this.dataSource.data = [result, ...this.dataSource.data];
           this.dataSource.data = this.dataSource.data; // push obj into datasource
         }
       }
@@ -70,12 +86,13 @@ export class AgencyComponent implements AfterViewInit, OnInit {
   onDelete(row: any) {
     console.log(row.id)
     const dialogRef = this.dialog.open(DialogDeleteConfirmComponent, {
-      data: { id: row.id, content: 'Bạn chắc chắn muốn xóa nhà phân phối "' + row.fullName + '"?' },
+      data: { id: row.id, type: SERVICE_TYPE.AGENCYSERVICE, content: 'Bạn chắc chắn muốn xóa nhà phân phối "' + row.fullName + '"?' },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog delete was closed');
       if (result) {
+        this.helper.deleteAgency(row);
         this.dataSource.data = this.dataSource.data.filter(x => x.id !== row.id);
       }
       console.log(this.dataSource.data);

@@ -1,8 +1,10 @@
+import { Injectable } from '@angular/core';
 import { CONFIG } from '../common/config';
 import { Order } from '../models/order';
 import { Search } from '../models/search';
 import { WebRequestService } from './web-request.service';
 
+@Injectable({ providedIn: 'root' })
 export class OrderService {
     readonly url: string = CONFIG.URL.ORDERS.ORDER;
     readonly url1: string = CONFIG.URL.ORDERS.SEARCH;

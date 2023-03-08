@@ -84,7 +84,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   ],
   providers: [{ provide: DateAdapter, useClass: DateFormat },
   { provide: MatPaginatorIntl, useValue: CustomPaginator() },
-  { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true }],
+  { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule {

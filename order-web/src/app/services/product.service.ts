@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { CONFIG } from '../common/config';
 import { Product } from '../models/product';
 import { WebRequestService } from './web-request.service';
 
+@Injectable({ providedIn: 'root' })
 export class ProductService {
     readonly url: string = CONFIG.URL.PRODUCT;
 
@@ -11,6 +13,10 @@ export class ProductService {
 
     getProductList() {
         return this.webrequestService.get(this.url);
+    }
+
+    getOne(id: number) {
+        return this.webrequestService.post(this.url + `/${id}`);
     }
 
     create(obj: Product) {

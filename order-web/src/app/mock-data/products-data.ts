@@ -6,7 +6,7 @@ export const PRODUCT_DATA: Product[] = [
         name: 'PCB 30 (vỏ bao Phụ Tử)',
         quantity: 1005,
         price: 100000,
-        createDate: '01/01/2023',
+        createdDate: '01/01/2023',
         note: '',
     },
     {
@@ -14,7 +14,7 @@ export const PRODUCT_DATA: Product[] = [
         name: 'PCB 30 (vỏ bao Sư Tử)',
         quantity: 1010,
         price: 90000,
-        createDate: '11/01/2023',
+        createdDate: '11/01/2023',
         note: '',
     },
     {
@@ -22,7 +22,7 @@ export const PRODUCT_DATA: Product[] = [
         name: 'PCB 40 (vỏ bao Phụ tử)',
         quantity: 100,
         price: 120000,
-        createDate: '15/01/2023',
+        createdDate: '15/01/2023',
         note: '',
     },
     {
@@ -30,7 +30,7 @@ export const PRODUCT_DATA: Product[] = [
         name: 'PCB 40 (vỏ bao Sử Tử)',
         quantity: 100,
         price: 11000,
-        createDate: '15/01/2023',
+        createdDate: '15/01/2023',
         note: '',
     },
 ]

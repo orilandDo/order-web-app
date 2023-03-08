@@ -104,7 +104,7 @@ export class OrderAddComponent implements OnInit {
       if (response) {
         this.order.id = response.id;
         this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_ORDER', MSG_STATUS.SUCCESS));
-        this.helper.pushOrder(this.order); /// push on top list
+        this.helper.addOrder(this.order);
         this.router.navigate(['orders/list']); 
       } else {
         this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_ORDER', MSG_STATUS.FAIL));
@@ -116,8 +116,7 @@ export class OrderAddComponent implements OnInit {
     this.router.navigate(['orders/list']); 
   }
 
-  onKeyUp(event: any) {
-    console.log(this.order.products)
+  focusOut() {
     this.order.productTotal = 0;
     this.order.products.forEach(element => {
       this.order.productTotal += element.quantity;

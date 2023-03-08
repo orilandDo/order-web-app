@@ -14,7 +14,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./dialog-delete-confirm.component.scss']
 })
 export class DialogDeleteConfirmComponent implements OnInit {
-  content: string = '';
   helper = new Helper();
 
   constructor(
@@ -29,24 +28,23 @@ export class DialogDeleteConfirmComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data)
-    this.content = this.data.content;
   }
 
-  onSubmit(type: number, id: number) {
-    switch (type) {
+  onSubmit(data: any) {
+    switch (data.type) {
       case SERVICE_TYPE.PRODUCTSERVICE:
-        this.productService.delete(id).subscribe((response) => {
-          this.onResponse(id, 'MESSAGE.DELETE_PRODUCT', response);
+        this.productService.delete(data.id).subscribe((response) => {
+          this.onResponse(data.id, 'MESSAGE.DELETE_PRODUCT', response);
         });
         break;
       case SERVICE_TYPE.AGENCYSERVICE:
-        this.agencyService.delete(id).subscribe((response) => {
-          this.onResponse(id, 'MESSAGE.DELETE_AGENCY', response);
+        this.agencyService.delete(data.id).subscribe((response) => {
+          this.onResponse(data.id, 'MESSAGE.DELETE_AGENCY', response);
         });
         break;
       case SERVICE_TYPE.ORDERSERVICE:
-        this.orderService.delete(id).subscribe((response) => {
-          this.onResponse(id, 'MESSAGE.DELETE_ORDER', response);
+        this.orderService.delete(data.id).subscribe((response) => {
+          this.onResponse(data.id, 'MESSAGE.DELETE_ORDER', response);
         });
         break;
     }

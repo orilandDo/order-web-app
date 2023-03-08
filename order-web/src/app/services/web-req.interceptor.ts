@@ -49,7 +49,7 @@ export class WebReqInterceptor implements HttpInterceptor {
     }
 
     refreshAccessToken() {
-        if (this.refreshingAccessToken) {
+       // if (this.refreshingAccessToken) {
             return new Observable(observer => {
                 this.accessTokenRefreshed.subscribe(() => {
                     // this code will run when the access token has been refreshed
@@ -57,20 +57,20 @@ export class WebReqInterceptor implements HttpInterceptor {
                     observer.complete();
                 })
             })
-        } else {
-            this.refreshingAccessToken = true;
-            // // we want to call a method in the auth service to send a request to refresh the access token
-            // return this.authService.getNewAccessToken().pipe(
-            //     tap(() => {
-            //         console.log("Access Token Refreshed!");
-            //         this.refreshingAccessToken = false;
-            //         this.accessTokenRefreshed.next(null);
-            //     })
-            // )
-        }
+        //}
+        // } else {
+        //     this.refreshingAccessToken = true;
+        //     // we want to call a method in the auth service to send a request to refresh the access token
+        //     return this.authService.getNewAccessToken().pipe(
+        //         tap(() => {
+        //             console.log("Access Token Refreshed!");
+        //             this.refreshingAccessToken = false;
+        //             this.accessTokenRefreshed.next(null);
+        //         })
+        //     )
+        // }
 
     }
-
 
     addAuthHeader(request: HttpRequest<any>) {
         // get the access token
@@ -80,7 +80,7 @@ export class WebReqInterceptor implements HttpInterceptor {
             // append the access token to the request header
             return request.clone({
                 setHeaders: {
-                    'x-access-token': token
+                    'x-access-token': token,
                 }
             })
         }

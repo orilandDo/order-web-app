@@ -52,7 +52,7 @@
         "TITLE_MODIFIED": "Cập nhật thông tin sản phẩm",
         "ID": "Mã số",
         "NAME": "Tên sản phẩm",
-        "QUANTITY_INVENTORY": "Số lượng tồn kho",
+        "QUANTITY_INVENTORY": "Số lượng",
         "QUANTITY_WAREHOUSE": "Số lượng nhập kho",
         "PRICE": "Giá sản phẩm",
         "NOTE": "Ghi chú"

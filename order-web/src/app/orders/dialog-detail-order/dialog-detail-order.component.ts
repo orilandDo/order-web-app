@@ -6,7 +6,7 @@ import { Order } from '../../models/order';
 import { MyErrorStateMatcher } from '../order-add/order-add.component';
 import * as moment from 'moment';
 import { Helper } from '../../helpers/helper';
-import { DeliveryData } from 'src/app/mock-data/delivery-data';
+import { DeliveryData } from '../../mock-data/delivery-data';
 import { FormControl } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -170,7 +170,7 @@ export class DialogDetailOrderComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
-  onKeyUp(event: any) {
+  focusOut() {
     console.log(this.order.products)
     this.order.productTotal = 0;
     this.order.products.forEach(element => {

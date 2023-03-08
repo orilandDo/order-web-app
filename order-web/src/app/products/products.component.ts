@@ -9,6 +9,8 @@ import { DialogDeleteConfirmComponent } from '../common/dialog-delete-confirm/di
 import { PRODUCT_DATA } from '../mock-data/products-data';
 import { ProductService } from '../services/product.service';
 import { DialogDetailProductComponent } from './dialog-detail-product/dialog-detail-product.component';
+import { SERVICE_TYPE } from '../constants/const-data';
+import { Helper } from '../helpers/helper';
 
 @Component({
   selector: 'app-products',
@@ -24,6 +26,8 @@ export class ProductsComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<Product>(PRODUCT_DATA);
   clickedRows = new Set<Product>();
 
+  helper = new Helper();
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -32,10 +36,16 @@ export class ProductsComponent implements AfterViewInit, OnInit {
   ) { }
   
   ngOnInit(): void {
-    // this.productService.getProductList().subscribe((response: any) => {
-    //   console.log(response)
-    //   this.dataSource.data = response;
-    // });
+    const productList = this.helper.getProductList();
+    if (productList.length === 0) {
+      this.productService.getProductList().subscribe((response: any) => {
+        console.log(response)
+        this.helper.setProductList(response);
+        this.dataSource.data = response.length > 0 ? response.reverse() : [];
+      });
+    } else {
+      this.dataSource.data = productList.length > 0 ? productList.reverse() : [];
+    }
   }
 
   ngAfterViewInit() {
@@ -57,7 +67,7 @@ export class ProductsComponent implements AfterViewInit, OnInit {
           row.quantity = result.quantity;
           row.note = result.note;
         } else {
-          this.dataSource.data.push(result);
+          this.dataSource.data = [result, ...this.dataSource.data];
           this.dataSource.data = this.dataSource.data; // push obj into datasource
         }
       }
@@ -67,12 +77,13 @@ export class ProductsComponent implements AfterViewInit, OnInit {
   onDelete(row: any) {
     console.log(row.id)
     const dialogRef = this.dialog.open(DialogDeleteConfirmComponent, {
-      data: { id: row.id, content: 'Bạn chắc chắn muốn xóa sản phẩm "' + row.name + '"?' },
+      data: { id: row.id, type: SERVICE_TYPE.PRODUCTSERVICE, content: 'Bạn chắc chắn muốn xóa sản phẩm "' + row.name + '"?' },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog delete was closed');
       if (result) {
+        this.helper.deleteProduct(row);
         this.dataSource.data = this.dataSource.data.filter(x => x.id !== row.id);
       }
       console.log(this.dataSource.data);

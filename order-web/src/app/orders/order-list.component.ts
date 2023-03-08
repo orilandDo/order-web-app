@@ -9,7 +9,7 @@ import { Order } from '../models/order';
 import { DialogDetailOrderComponent } from './dialog-detail-order/dialog-detail-order.component';
 import { Helper } from '../helpers/helper';
 import { DialogConfirmOrderComponent } from './dialog-confirm-order/dialog-confirm-order.component';
-import { Cities, STATUS } from '../constants/const-data';
+import { Cities, SERVICE_TYPE, STATUS } from '../constants/const-data';
 import { CustomPaginator } from '../common/custom-paginator';
 import { DeliveryData } from '../mock-data/delivery-data';
 import { PRODUCT_DATA } from '../mock-data/products-data';
@@ -70,11 +70,15 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.dataSource.data = this.helper.getOrderList();
-    // this.orderService.getOrderList().subscribe((response: any) => {
-    //   console.log(response)
-    //   this.dataSource.data = response;
-    // });
+    const orderList = this.helper.getOrderList();
+    if (orderList.length === 0) {
+      this.orderService.getOrderList().subscribe((response: any) => {
+        console.log(response)
+        this.dataSource.data = response.length > 0 ? response.reverse() : [];
+      });
+    } else {
+      this.dataSource.data = orderList.length > 0 ? orderList.reverse() : [];
+    }
   }
 
   ngAfterViewInit() {
@@ -144,12 +148,13 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   onDelete(row: any) {
     console.log(row.id)
     const dialogRef = this.dialog.open(DialogDeleteConfirmComponent, {
-      data: { id: row.id, content: 'Bạn chắc chắn muốn xóa đơn hàng này không?' },
+      data: { id: row.id, type: SERVICE_TYPE.ORDERSERVICE, content: 'Bạn chắc chắn muốn xóa đơn hàng này không?' },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog delete was closed');
       if (result) {
+        this.helper.deleteOrder(row);
         this.dataSource.data = this.dataSource.data.filter(x => x.id !== row.id);
       }
       console.log(this.dataSource.data);

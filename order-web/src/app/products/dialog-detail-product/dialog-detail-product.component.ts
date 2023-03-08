@@ -22,7 +22,6 @@ export class DialogDetailProductComponent implements OnInit {
     name: '',
     quantity: 0,
     price: 0,
-    createDate: '',
     note: '',
   };
 
@@ -51,7 +50,6 @@ export class DialogDetailProductComponent implements OnInit {
 
   onSubmit() {
     if (this.validForm()) {
-      debugger
       if (this.product.id === 0) {
         // Call api insert
         // if add successfully or has error, send a toast
@@ -59,6 +57,7 @@ export class DialogDetailProductComponent implements OnInit {
           console.log(response)
           if (response) {
             this.product.id = response.id;
+            this.helper.addProduct(this.product);
             this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_PRODUCT', MSG_STATUS.SUCCESS));
             this.dialogRef.close(this.product);
           } else {
@@ -71,6 +70,7 @@ export class DialogDetailProductComponent implements OnInit {
         this.productService.update(this.product).subscribe((response: any) => {
           console.log(response)
           if (response) {
+            this.helper.updateProduct(this.product);
             this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_PRODUCT', MSG_STATUS.SUCCESS));
             this.dialogRef.close(this.product);
           } else {

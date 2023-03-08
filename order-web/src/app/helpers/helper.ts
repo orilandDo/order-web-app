@@ -1,8 +1,13 @@
 import { animate, style, transition, trigger, keyframes } from "@angular/animations";
 import { TranslateService } from "@ngx-translate/core";
 import { ToastrService } from "ngx-toastr";
+import { CONFIG } from "../common/config";
+import { Agency } from "../models/agency";
 import { LoginInfo } from "../models/login-info";
 import { Order } from "../models/order";
+import { Product } from "../models/product";
+import { ProductOrder } from "../models/product-order";
+import { User } from "../models/user";
 
 export interface INavbarData {
   routeLink: string;
@@ -53,7 +58,7 @@ export class Helper {
   checkSession() {
     let appLoginId = document.getElementById('app-login');
     let appBodyId = document.getElementById('app-body');
-    const session = sessionStorage.getItem('jwt');
+    const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
 
     appLoginId ? appLoginId.hidden = false : '';
     appBodyId ? appBodyId.hidden = true : '';
@@ -72,7 +77,7 @@ export class Helper {
   }
 
   isAdmin(): boolean {
-    const info = sessionStorage.getItem('loginInfo');
+    const info = sessionStorage.getItem(CONFIG.SESSION_STORAGE.LOGIN_INFO);
     if (info) {
       const json = JSON.parse(info) as LoginInfo;
       if (!json.isAdmin) {
@@ -83,7 +88,7 @@ export class Helper {
   }
 
   getInfoName(): string {
-    const info = sessionStorage.getItem('loginInfo');
+    const info = sessionStorage.getItem(CONFIG.SESSION_STORAGE.LOGIN_INFO);
     if (info) {
       const json = JSON.parse(info) as LoginInfo;
       return json.accountName;
@@ -91,9 +96,18 @@ export class Helper {
     return '';
   }
 
+  getMenuList(): INavbarData[] {
+    let menuList: INavbarData[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.MENU_LIST);
+    if (jsonString) {
+      menuList = JSON.parse(jsonString) as INavbarData[];
+    }
+    return menuList;
+  }
+
   getOrderList(): Order[] {
     let orderList: Order[] = [];
-    let jsonString = sessionStorage.getItem('orderList');
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.ORDER_LIST);
     if (jsonString) {
       orderList = JSON.parse(jsonString) as Order[];
       orderList.forEach(item => {
@@ -108,21 +122,12 @@ export class Helper {
             item.statusLabel = 'Đã nhận';
             break;
           case 4:
-            item.statusLabel = 'hủy';
+            item.statusLabel = 'Hủy';
             break;
         }
       });
     }
     return orderList;
-  }
-
-  getMenuList(): INavbarData[] {
-    let menuList: INavbarData[] = [];
-    let jsonString = sessionStorage.getItem('menuList');
-    if (jsonString) {
-      menuList = JSON.parse(jsonString) as INavbarData[];
-    }
-    return menuList;
   }
 
   updateStatusOrder(id: number, status: number) {
@@ -133,7 +138,7 @@ export class Helper {
           element.status = status;
         }
       });
-      sessionStorage.setItem('orderList', JSON.stringify(orderList));
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.ORDER_LIST, JSON.stringify(orderList));
     }
   }
 
@@ -145,19 +150,165 @@ export class Helper {
           element = obj;
         }
       });
-      sessionStorage.setItem('orderList', JSON.stringify(orderList));
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.ORDER_LIST, JSON.stringify(orderList));
     }
   }
 
-  pushOrder(data: any) {
-    debugger
-    let orderList: Order[] = [];
-    let jsonString = sessionStorage.getItem('orderList');
-    if (jsonString) {
-      orderList = JSON.parse(jsonString) as Order[];
-      orderList.push(data);
-      sessionStorage.setItem('orderList', JSON.stringify(orderList));
+  addOrder(data: any) {
+    let orderList = this.getOrderList();
+    orderList.push(data);
+    sessionStorage.setItem('orderList', JSON.stringify(orderList));
+  }
+
+  deleteOrder(obj: any) {
+    let orderList = this.getOrderList();
+    if (orderList.length > 0) {
+      orderList = orderList.filter(x => x.id !== obj.id);
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.ORDER_LIST, JSON.stringify(orderList));
     }
+  }
+
+  getAgencyList(): Agency[] {
+    let agencyList: Agency[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.AGENCY_LIST);
+    if (jsonString) {
+      agencyList = JSON.parse(jsonString) as Agency[];
+      const userList = this.getUserList();
+      agencyList.forEach(element => {
+        const user = userList.find(x => x.id === element.userId);
+        element.accountName = user ? user.username : '';
+        element.password = user ? user.password : '';
+      });
+    }
+    return agencyList;
+  }
+
+  updateAgency(obj: any) {
+    let agencyList = this.getAgencyList();
+    if (agencyList.length > 0) {
+      agencyList.forEach(element => {
+        if (element.id === obj.id) {
+          element.address = obj.address;
+          element.contract = obj.contract;
+          element.email = obj.email;
+          element.fullName = obj.fullName;
+          element.note = obj.note;
+          element.phone = obj.phone;
+        }
+      });
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.AGENCY_LIST, JSON.stringify(agencyList));
+    }
+  }
+
+  addAgency(data: any) {
+    let agencyList = this.getAgencyList();
+    // const userList = this.getUserList();
+    // const user = userList.find(x => x.id === data.userId);
+    // data.accountName = user ? user.username : '';
+    // data.password = user ? user.password : '';
+    agencyList.push(data);
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.AGENCY_LIST, JSON.stringify(agencyList));
+  }
+
+  deleteAgency(obj: any) {
+    let agencyList = this.getAgencyList();
+    if (agencyList.length > 0) {
+      agencyList = agencyList.filter(x => x.id !== obj.id);
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.AGENCY_LIST, JSON.stringify(agencyList));
+    }
+  }
+
+  setProductList(data: any[]) {
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST, JSON.stringify(data));
+  }
+
+  getProductList(): Product[] {
+    let productList: Product[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST);
+    if (jsonString) {
+      productList = JSON.parse(jsonString) as Product[];
+    }
+    return productList;
+  }
+
+  updateProduct(obj: any) {
+    let productList = this.getProductList();
+    if (productList.length > 0) {
+      productList.forEach(element => {
+        if (element.id === obj.id) {
+          element.name = obj.name;
+          element.quantity = obj.quantity;
+          element.price = obj.price;
+        }
+      });
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST, JSON.stringify(productList));
+    }
+  }
+
+  addProduct(data: any) {
+    let productList = this.getProductList();
+    productList.push(data); // push on top of array
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST, JSON.stringify(productList));
+  }
+
+  deleteProduct(obj: any) {
+    let productList = this.getProductList();
+    if (productList.length > 0) {
+      productList = productList.filter(x => x.id !== obj.id);
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST, JSON.stringify(productList));
+    }
+  }
+
+  getProductOrderList(): ProductOrder[] {
+    let productOrderList: ProductOrder[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.PRODUCT_ORDER_LIST);
+    if (jsonString) {
+      productOrderList = JSON.parse(jsonString) as ProductOrder[];
+    }
+    return productOrderList;
+  }
+
+  updateProductOrder(obj: any) {
+    let productOrderList = this.getProductOrderList();
+    if (productOrderList.length > 0) {
+      productOrderList.forEach(element => {
+        if (element.productId === obj.productId && element.orderId === obj.orderId) {
+          element.quantity = obj.quantity;
+        }
+      });
+      sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_ORDER_LIST, JSON.stringify(productOrderList));
+    }
+  }
+
+  addProductOrder(data: ProductOrder[]) {
+    let productOrderList = this.getProductOrderList();
+    productOrderList = data.concat(productOrderList);
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_ORDER_LIST, JSON.stringify(productOrderList));
+  }
+
+  getUserList(): User[] {
+    let userList: User[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.USER_LIST);
+    if (jsonString) {
+      userList = JSON.parse(jsonString) as User[];
+    }
+    return userList;
+  }
+
+  setAgencyList(agencyList: Agency[]) {
+    const userList = this.getUserList();
+    agencyList.forEach(element => {
+      const user = userList.find(x => x.id === element.userId);
+      element.accountName = user ? user.username : '';
+      element.password = user ? user.password : '';
+    });
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.AGENCY_LIST, JSON.stringify(agencyList));
+  }
+
+  addUser(data: User) {
+    let userList = this.getUserList();
+    userList = [data].concat(userList);
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.USER_LIST, JSON.stringify(userList));
   }
 
   getMessage(translate: TranslateService, key: string, status: number, content?: string): string {

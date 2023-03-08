@@ -2,11 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MyErrorStateMatcher } from '../../orders/order-add/order-add.component';
 import { Agency } from '../../models/agency';
+import { User } from '../../models/user';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { Helper } from '../../helpers/helper';
 import { MSG_STATUS } from '../../constants/const-data';
 import { AgencyService } from '../../services/agency.service';
+import { UserService } from '../../services/user.service';
+import { CONFIG } from '../../common/config';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-dialog-detail-agency',
@@ -29,7 +33,8 @@ export class DialogDetailAgencyComponent implements OnInit {
     accountName: '',
     password: '',
     confirmPassword: '',
-    email: ''
+    email: '',
+    userId: 0,
   };
 
   helper = new Helper();
@@ -40,6 +45,7 @@ export class DialogDetailAgencyComponent implements OnInit {
     public translate: TranslateService,
     private toastr: ToastrService,
     private agencyService: AgencyService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -66,11 +72,25 @@ export class DialogDetailAgencyComponent implements OnInit {
     if (this.validForm()) {
       if (this.agency.id === 0) {
         // Call api insert
-        // Set this.agency.id = Api return
         this.agencyService.create(this.agency).subscribe((response: any) => {
           console.log(response)
+          debugger
           if (response) {
             this.agency.id = response.id;
+            this.agency.userId = response.userId;
+            this.helper.addAgency(this.agency);
+
+            // Add user to storage
+            // Encrypt password
+            //var passwordEncrypt = CryptoJS.AES.encrypt(this.agency.password, CONFIG.SECRET_KEY).toString();
+            const user: User = {
+              id: response.userId,
+              username: this.agency.accountName,
+              password: this.agency.password,
+              isAdmin: false,
+            };
+            this.helper.addUser(user);
+
             this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_AGENCY', MSG_STATUS.SUCCESS));
             this.dialogRef.close(this.agency);
           } else {
@@ -82,6 +102,7 @@ export class DialogDetailAgencyComponent implements OnInit {
         this.agencyService.update(this.agency).subscribe((response: any) => {
           console.log(response)
           if (response) {
+            this.helper.updateAgency(this.agency);
             this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_AGENCY', MSG_STATUS.SUCCESS));
             this.dialogRef.close(this.agency);
           } else {

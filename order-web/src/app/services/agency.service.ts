@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { CONFIG } from '../common/config';
 import { Agency } from '../models/agency';
 import { WebRequestService } from './web-request.service';
 
+@Injectable({ providedIn: 'root' })
 export class AgencyService {
     readonly url: string = CONFIG.URL.AGENCY;
 
@@ -9,7 +11,7 @@ export class AgencyService {
         private webrequestService: WebRequestService,
     ) { }
 
-    getAgencytList(){
+    getAgencyList(){
         return this.webrequestService.get(this.url);
     }
 

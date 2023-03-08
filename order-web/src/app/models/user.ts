@@ -3,8 +3,6 @@ export interface User {
     username: string,
     password: string,
     isAdmin: boolean,
-    sessions: [{
-        token: string,
-        expiresAt: number
-    }]
+    token?: string,
+    expiresAt?: number
 }
