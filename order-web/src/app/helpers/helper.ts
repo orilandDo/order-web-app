@@ -147,7 +147,20 @@ export class Helper {
     if (orderList.length > 0) {
       orderList.forEach(element => {
         if (element.id === obj.id) {
-          element = obj;
+          element.createdDate = obj.createdDate;
+          element.deliveryId = obj.deliveryId;
+          element.pickupId = obj.pickupId;
+          element.productTotal = obj.productTotal;
+          element.driver = obj.driver;
+          element.note = obj.note;
+          element.transport = obj.transport;
+          element.licensePlates = obj.licensePlates;
+          element.receivedDate = obj.receivedDate;
+          element.status = obj.status;
+          element.note = obj.note;
+          element.products = obj.products;
+          element.contract = obj.contract;
+          element.agencyId = obj.agencyId; 
         }
       });
       sessionStorage.setItem(CONFIG.SESSION_STORAGE.ORDER_LIST, JSON.stringify(orderList));

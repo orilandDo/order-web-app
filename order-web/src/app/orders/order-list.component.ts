@@ -49,13 +49,12 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   selectedStatus: any = null;
 
   searchForm: any = {
-    id: 0,
-    agency: 0,
-    createdDate: moment().format('DD/MM/YYYY'),
-    product: 0,
+    orderId: 0,
+    agencyId: 0,
+    productId: 0,
     status: 0,
-    start: '',
-    end: ''
+    startDate: '',
+    endDate: ''
   }
   //select = {};
   range = new FormGroup({
@@ -176,12 +175,11 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   }
 
   onSearch() {
-    this.searchForm.agency = this.agencySelected !== null ? this.agencySelected.id : 0;
-    this.searchForm.createdDate = '';
-    this.searchForm.product = this.productSelected !== null ? this.productSelected.id : 0;
+    this.searchForm.agencyId = this.agencySelected !== null ? this.agencySelected.id : 0;
+    this.searchForm.productId = this.productSelected !== null ? this.productSelected.id : 0;
     this.searchForm.status = this.selectedStatus !== null ? this.selectedStatus.value : 0;
-    this.searchForm.start = this.range.value.start !== null ? moment(this.range.value.start).format('DD/MM/YYYY') : '';
-    this.searchForm.end = this.range.value.end !== null ? moment(this.range.value.end).format('DD/MM/YYYY') : '';
+    this.searchForm.startDate = this.range.value.start !== null ? moment(this.range.value.start).format('DD/MM/YYYY') : '';
+    this.searchForm.endDate = this.range.value.end !== null ? moment(this.range.value.end).format('DD/MM/YYYY') : '';
     console.log(this.searchForm)
     alert('Tìm kiếm đơn hàng')
   }
