@@ -10,7 +10,7 @@
                     class="col-7 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="username" type="text" placeholder="Tên đăng nhập" (keyup)="onKey($event, 'username')"
                     maxlength="50" [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
-                <p *ngIf="!isUsernameValid" class="text-red-500 text-xs italic">{{'VALIDATE.USERNAME' | translate}}</p>
+               
             </div>
             <div class="mb-6 row field">
                 <label class="text-label text-sm font-bold mb-2 col-5" for="password">
@@ -31,8 +31,8 @@
                     Forgot Password?
                 </a> -->
             </div>
-            <div *ngIf="error || (error !== null && error.length > 0)" class="notification">
-                <span>{{error}}</span>
+            <div class="notification" *ngIf="error && error.length !== 0">
+                {{error}}
             </div>
         </form>
         <p class="text-center text-xs footer">

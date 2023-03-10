@@ -1,8 +1,8 @@
 export class SearchOrderDto {
-    orderId: number;
-    agencyId:number;
-    productId: number;
-    startDate: string;
-    endDate: string;
-    status: number;
+    orderId?: number;
+    agencyId?:number;
+    productId?: number;
+    startDate?: string;
+    endDate?: string;
+    status?: number;
 }

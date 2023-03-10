@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { fadeInOut, Helper, INavbarData, rotate } from '../helpers/helper';
 import { NavbarData } from './nav-data';
@@ -21,31 +21,27 @@ export class SidenavComponent implements OnInit {
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
-  navData = NavbarData;
+  navData:INavbarData[] = [];
   multiple: boolean = false;
   isSuccess: boolean = false;
 
   isAdmin: boolean = new Helper().isAdmin();
+  helper = new Helper();
 
-  @HostListener('window: resize', ['$event']) 
+  @HostListener('window: resize', ['$event'])
   onResize(event: any) {
     this.screenWidth = window.innerWidth;
     if (this.screenWidth <= 768) {
       this.collapsed = false;
-      this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+      this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
     }
   }
 
-  constructor(public router: Router, private route: ActivatedRoute) {
-   // console.log(this.isAdmin)
-    // if (this.isAdmin) {
-    //   this.navData = MenuAdminData;
-    // } else {
-    //   this.navData = MenuUserData;
-    // }
-  }
+  constructor(public router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    console.log('nav')
+    this.navData = this.helper.getMenuList();
     this.screenWidth = window.innerWidth;
     this.route.params.subscribe((params: Params) => this.isSuccess = params['caller']);
     this.toggleCollapsed(); // set narba show after login
@@ -53,12 +49,12 @@ export class SidenavComponent implements OnInit {
 
   toggleCollapsed(): void {
     this.collapsed = !this.collapsed;
-    this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
   }
 
   closeSidenav(): void {
     this.collapsed = false;
-    this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
   }
 
   handleClick(item: INavbarData): void {

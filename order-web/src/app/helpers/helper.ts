@@ -3,6 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { ToastrService } from "ngx-toastr";
 import { CONFIG } from "../common/config";
 import { Agency } from "../models/agency";
+import { Delivery } from "../models/delivery";
 import { LoginInfo } from "../models/login-info";
 import { Order } from "../models/order";
 import { Product } from "../models/product";
@@ -60,9 +61,6 @@ export class Helper {
     let appBodyId = document.getElementById('app-body');
     const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
 
-    appLoginId ? appLoginId.hidden = false : '';
-    appBodyId ? appBodyId.hidden = true : '';
-
     if (session && Number(session) === 1) {
       appLoginId ? appLoginId.hidden = true : '';
       appBodyId ? appBodyId.hidden = false : '';
@@ -105,6 +103,19 @@ export class Helper {
     return menuList;
   }
 
+  getDeliveryList(): Delivery[] {
+    let deliveryList: Delivery[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.DELIVERY_LIST);
+    if (jsonString) {
+      deliveryList = JSON.parse(jsonString) as Delivery[];
+    }
+    return deliveryList;
+  }
+
+  setOrderList(data: any[]) {
+    sessionStorage.setItem(CONFIG.SESSION_STORAGE.ORDER_LIST, JSON.stringify(data));
+  }
+
   getOrderList(): Order[] {
     let orderList: Order[] = [];
     let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.ORDER_LIST);
@@ -145,24 +156,24 @@ export class Helper {
   updateOrder(obj: any) {
     let orderList = this.getOrderList();
     if (orderList.length > 0) {
-      orderList.forEach(element => {
-        if (element.id === obj.id) {
-          element.createdDate = obj.createdDate;
-          element.deliveryId = obj.deliveryId;
-          element.pickupId = obj.pickupId;
-          element.productTotal = obj.productTotal;
-          element.driver = obj.driver;
-          element.note = obj.note;
-          element.transport = obj.transport;
-          element.licensePlates = obj.licensePlates;
-          element.receivedDate = obj.receivedDate;
-          element.status = obj.status;
-          element.note = obj.note;
-          element.products = obj.products;
-          element.contract = obj.contract;
-          element.agencyId = obj.agencyId; 
-        }
-      });
+      const order = orderList.find(x => x.id === obj.id);
+      if (order) {
+        order.createdDate = obj.createdDate;
+        order.deliveryId = obj.deliveryId;
+        order.pickupId = obj.pickupId;
+        order.productTotal = obj.productTotal;
+        order.driver = obj.driver;
+        order.note = obj.note;
+        order.transport = obj.transport;
+        order.licensePlates = obj.licensePlates;
+        order.receivedDate = obj.receivedDate;
+        order.status = obj.status;
+        order.note = obj.note;
+        order.products = obj.products;
+        order.contract = obj.contract;
+        order.agencyId = obj.agencyId;
+      }
+
       sessionStorage.setItem(CONFIG.SESSION_STORAGE.ORDER_LIST, JSON.stringify(orderList));
     }
   }
@@ -346,6 +357,10 @@ export class Helper {
 
   showError(toastr: ToastrService, msg: string, title?: string) {
     toastr.error(msg);
+  }
+
+  showWarning(toastr: ToastrService, msg: string, title?: string) {
+    toastr.warning(msg);
   }
 }
 

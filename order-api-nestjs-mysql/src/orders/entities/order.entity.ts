@@ -40,4 +40,6 @@ export class Order {
 
   @Column({ length: 200 }) 
   contract: string;
+
+  products?: any[];
 }

@@ -27,7 +27,7 @@
       </span>
       <input matInput
         class="col-7 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="contract" type="text" placeholder="HĐBB2023/XMHT" maxlength=50 [(ngModel)]="order.contract"
+        id="contract" type="text" placeholder="" maxlength=50 [(ngModel)]="order.contract"
         [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
     </div>
     <div class="mb-3 row field" [hidden]="!isAdmin">
@@ -35,29 +35,19 @@
         {{'ORDER.AGENCY' | translate}}
         <label class="require">*</label>
       </span>
-      <input matInput
-        class="col-7 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="agency" type="text" placeholder="" maxlength=200 [(ngModel)]="order.agencyName"
-        [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
+      <select
+        class="col-7 form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        [(ngModel)]="agencySelected" required>
+        <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_AGENCY' | translate}} --
+        </option>
+        <option [ngValue]="item" *ngFor="let item of agencyList">{{item.fullName}}</option>
+      </select>
     </div>
     <div class="mb-3 row field">
       <span class="col-5 text-label" for="deliveryId">
         {{'ORDER.DELIVERY_ADDRESS' | translate}}
         <label class="require">*</label>
       </span>
-      <!-- <mat-form-field appearance="fill"
-        class="col-7 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        <mat-label>{{'ORDER.CITY' | translate}}</mat-label>
-        <mat-select 
-        placeholder="Chon tinh/tp"
-        [compareWith]="compareObjects"
-        [(value)]="deliverySelected" required>
-          <mat-option [value]="0">-----</mat-option>
-          <mat-option *ngFor="let item of deliveries" [value]="item.id">
-            {{item.label}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field> -->
       <select class="col-7 form-select" [(ngModel)]="deliverySelected" required>
         <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.CITY' | translate}} --</option>
         <option [ngValue]="item" *ngFor="let item of deliveries">{{item.label}}</option>
@@ -96,18 +86,20 @@
           <input matInput
             class="col-3 margin appearance-none border rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="quantity" type="number" max="1000" min="0" maxlength="4" [(ngModel)]="item.quantity"
-            [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" 
-            (focusout)="focusOut()"/>
+            [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" (focusout)="focusOut()" />
           <span class="col-2 label-ton">(tấn)</span>
         </div>
       </div>
+    </div>
+    <div *ngIf="error1 || (error1 !== null && error1.length !== 0)" class="mb-3 row field notification">
+      <span>{{error1}}</span>
     </div>
     <div class="mb-3 row field">
       <span class="col-5 text-label" for="productTotal">
         {{'ORDER.LABEL_TOTAL' | translate}}
         <label class="require">*</label>
       </span>
-      <input matInput 
+      <input matInput
         class="col-5 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="productTotal" type="number" max="99999" [(ngModel)]="order.productTotal"
         [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
@@ -119,7 +111,8 @@
         <label class="require">*</label>
       </span>
       <select class="col-7 form-select" [(ngModel)]="transportSelected" required>
-        <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_TRANSPORT' | translate}} --</option>
+        <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_TRANSPORT' | translate}} --
+        </option>
         <option [ngValue]="item" *ngFor="let item of transport">{{item.label}}</option>
       </select>
       <!-- <mat-form-field appearance="fill" class="col-7 border rounded">
@@ -140,7 +133,7 @@
       </span>
       <input matInput
         class="col-7 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="licensePlates" type="text" placeholder="KG1234" maxlength=50 [(ngModel)]="order.licensePlates"
+        id="licensePlates" type="text" placeholder="" maxlength=50 [(ngModel)]="order.licensePlates"
         [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
     </div>
     <div class="mb-3 row field">
@@ -150,7 +143,7 @@
       </span>
       <input matInput
         class="col-7 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="driver" type="text" placeholder="Nguyen Van A" maxlength="50" [(ngModel)]="order.driver"
+        id="driver" type="text" placeholder="" maxlength="50" [(ngModel)]="order.driver"
         [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
     </div>
     <div class="mb-3 row field">
@@ -158,19 +151,21 @@
         {{'ORDER.LABEL_RECEIVEDDATE' | translate}}
         <label class="require">*</label>
       </span>
-      <mat-form-field appearance="fill" class="col-5 border rounded">
-        <mat-label>Chọn ngày nhận</mat-label>
-        <input matInput [matDatepicker]="picker" [formControl]="date">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+      <form [formGroup]="testForm" class="col-5">
+        <mat-form-field appearance="fill" class="border rounded">
+          <mat-label>Chọn ngày nhận</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker [startAt]="date"></mat-datepicker>
+        </mat-form-field>
+      </form>
     </div>
     <div class="mb-3 row field">
       <span class="col-5 text-label" for="note">
         {{'ORDER.NOTE' | translate}}
       </span>
       <textarea
-        class="col-7 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="col-7 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="note" type="text" placeholder="" maxlength="1000" [(ngModel)]="order.note"
         [ngModelOptions]="{standalone: true}"></textarea>
     </div>
@@ -179,14 +174,14 @@
       <span class="col-5 text-label" for="status">
         {{'ORDER.STATUS' | translate}}
       </span>
-      <mat-radio-group class="col-7" [(ngModel)]="selectedStatus">
+      <mat-radio-group class="col-7" [(ngModel)]="statusSelected">
         <mat-radio-button *ngFor="let item of status" [value]="item">
           {{item.label}}
         </mat-radio-button>
       </mat-radio-group>
     </div>
-    <div *ngIf="error || (error !== null && error.length > 0)" class="notification">
-      <span>error</span>
+    <div *ngIf="error || (error !== null && error.length !== 0)" class="notification">
+      <span>{{error}}</span>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

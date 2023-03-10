@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Cities, MSG_STATUS, STATUS, Transports } from '../../constants/const-data';
-import { Order } from '../../models/order';
+import { Order, ProductItem } from '../../models/order';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Helper } from '../../helpers/helper';
 import { ErrorStateMatcher } from '@angular/material/core';
 import * as moment from 'moment';
-import { PRODUCT_DATA } from '../../mock-data/products-data';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeliveryData } from '../../mock-data/delivery-data';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,18 +29,21 @@ export class OrderAddComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   cities: any[] = Cities;
-  deliveries: any[] = DeliveryData;
-  products: any[] = PRODUCT_DATA;
+  deliveries: any[] = [];
+  productList: any[] = [];
   transport: any[] = Transports;
   status: any[] = STATUS;
+  agencyList: any[] = [];
 
   error: any = '';
+  error1: any = '';
   isAdmin: boolean = new Helper().isAdmin();
 
-  selectedStatus: any = {value: 1, label: ''};
+  selectedStatus: any = { value: 1, label: '' };
   pickupSelected: any = null;
   deliverySelected: any = null;
   transportSelected: any = null;
+  agencySelected: any = null;
 
   order: Order = {
     id: 0,
@@ -73,47 +75,52 @@ export class OrderAddComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.order.products = this.products;
-    this.order.products.forEach(element => {
-      element.quantity = 0;
-      this.order.productTotal += element.quantity;
+    this.agencyList = this.helper.getAgencyList();
+    this.productList = this.helper.getProductList();
+    this.deliveries = this.helper.getDeliveryList();
+    this.setProductOrder();
+  }
+
+  setProductOrder() {
+    const list: ProductItem[] = [];
+    this.productList.forEach(element => {
+      const item = {
+        id: element.id,
+        name: element.name,
+        quantity: 0,
+      };
+      list.push(item);
     });
+    this.order.products = list;
   }
 
   onSubmit() {
-    debugger
-    this.order.status =  Number(this.selectedStatus.value);
-    this.order.deliveryId = Number(this.deliverySelected.id);
-    this.order.pickupId =  Number(this.pickupSelected.id);
-    this.order.transport =  Number(this.transportSelected.id);
-    this.order.receivedDate = moment(this.date.value).format('DD/MM/YYYY');
-    // const dialogRef = this.dialog.open(DialogConfirmOrderComponent, {
-    //   data: this.order,
-    // });
+    if (this.onValidationForm()) {
+      this.order.status = Number(this.selectedStatus.value);
+      this.order.deliveryId = Number(this.deliverySelected.id);
+      this.order.pickupId = Number(this.pickupSelected.id);
+      this.order.transport = Number(this.transportSelected.id);
+      this.order.receivedDate = moment(this.date.value).format('DD/MM/YYYY');
+      this.order.agencyId = this.agencySelected !== null ? this.agencySelected.id : 0;
+      this.order.products = this.order.products.filter(x => x.quantity !== 0);
+      console.log(this.order)
+      this.orderService.create(this.order).subscribe((response: any) => {
+        console.log(response)
+        if (response) {
+          this.order.id = response.id;
+          this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_ORDER', MSG_STATUS.SUCCESS));
+          this.helper.addOrder(this.order);
+          this.router.navigate(['orders/list']);
+        } else {
+          this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_ORDER', MSG_STATUS.FAIL));
+        }
+      });
+    }
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog detail was closed');
-    //   this.router.navigate(['orders']); 
-    // });
-
-    // Call api insert new record
-
-    // If return true (by id), save record to storage
-    this.orderService.create(this.order).subscribe((response: any) => {
-      console.log(response)
-      if (response) {
-        this.order.id = response.id;
-        this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_ORDER', MSG_STATUS.SUCCESS));
-        this.helper.addOrder(this.order);
-        this.router.navigate(['orders/list']); 
-      } else {
-        this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.ADD_ORDER', MSG_STATUS.FAIL));
-      }
-    });
-   }
+  }
 
   onCancel() {
-    this.router.navigate(['orders/list']); 
+    this.router.navigate(['orders/list']);
   }
 
   focusOut() {
@@ -121,6 +128,28 @@ export class OrderAddComponent implements OnInit {
     this.order.products.forEach(element => {
       this.order.productTotal += element.quantity;
     });
+  }
+
+  onValidationForm(): boolean {
+    let isValidForm: boolean = true;
+    if (this.order.contract.length === 0
+      || !this.agencySelected
+      || !this.deliverySelected
+      || !this.pickupSelected
+      || !this.transportSelected
+      || this.order.licensePlates.length === 0
+      || this.order.driver.length === 0) {
+      isValidForm = false;
+      this.error = 'Vui lòng nhập đầy đủ thông tin bắt buộc (*)';
+    } 
+    if (this.order.productTotal === 0) {
+      isValidForm = false;
+      this.error1 = 'Vui lòng nhập số lượng sản phẩm';
+    } else {
+      this.error = '';
+      isValidForm = true;
+    }
+    return isValidForm;
   }
 
 }

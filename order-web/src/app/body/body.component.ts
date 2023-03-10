@@ -16,7 +16,9 @@ export class BodyComponent implements OnInit {
     this.agency = this.helper.getInfoName();
   }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { 
+    console.log('body')
+  }
 
   getBodyClass(): string {
     let styleClass = '';

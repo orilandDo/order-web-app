@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Helper } from '../helpers/helper';
+import { Component, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { CONFIG } from '../common/config';
+import { Helper, INavbarData } from '../helpers/helper';
 import { LoginService } from '../services/login.service';
 
 @Component({
@@ -8,6 +10,7 @@ import { LoginService } from '../services/login.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  navigateComponent: string = 'dashboard';
   username: string = 'admin';
   password: string = '123aaa';
 
@@ -16,25 +19,33 @@ export class LoginComponent implements OnInit {
   error: string = '';
   helper: Helper = new Helper();
 
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: LoginService,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+    console.log('login')
     // check session
     this.helper.checkSession();
-
-    this.loginService
-      .errorSubject
-      .subscribe((errorMessage: any) => {
-        this.error = errorMessage;
-      });
+    const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
+    if (Number(session) === 1) {
+      this.router.navigate([this.navigateComponent]);
+    }
   }
 
   validationUsername(): boolean {
-    const pattern = RegExp(/^[\w~.]*$/);
+    let pattern = RegExp(/^[\w~.]*$/);
     if (pattern.test(this.username)) {
       this.isUsernameValid = true;
       return true;
-    } 
+    } else {
+      pattern = RegExp(/^(?:[A-Z\d][A-Z\d_-]{5,10}|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})$/i);
+      if (pattern.test(this.username)) {
+        this.isUsernameValid = true;
+        return true;
+      }
+    }
+    this.error = 'Tên đăng nhập không thể chứa kí tự đặc biệt.';
     this.isUsernameValid = false;
     return false;
   }
@@ -42,6 +53,7 @@ export class LoginComponent implements OnInit {
   validationPassword(): boolean {
     if (this.password.length === 0) {
       this.isPasswordValid = false;
+      this.error = 'Tên đăng nhập hoặc mật khẩu không đúng.';
       return false;
     }
     this.isPasswordValid = true;
@@ -60,13 +72,13 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.validationUsername() && this.validationPassword()) {
       this.loginService.login(this.username.trim(), this.password.trim());
-      this.loginService
-      .errorSubject
-      .subscribe((errorMessage: any) => {
-        this.error = errorMessage;
+      this.loginService.errorSubject.subscribe((errorMessage: any) => {
+        if (errorMessage) {
+          this.error = errorMessage;
+        }
       });
     } else {
-      this.error = 'Username or password is invalid.';
+      this.error = 'Tên đăng nhập hoặc mật khẩu không đúng.';
     }
   }
 

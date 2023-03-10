@@ -15,17 +15,13 @@ export class AgencyService {
     ) { }
 
     async findAll(): Promise<Agency[]> {
-        return await this.agencyRepo.find({
-            where: {
-                id: Not(1)
-            },
-        });
+        return await this.agencyRepo.find();
     }
 
     async findOne(id: number): Promise<Agency> {
         return await this.agencyRepo.findOne({
             where: {
-                id: Not(1)
+                userId: id
             },
         })
     }

@@ -11,11 +11,7 @@ export class UserService {
     ) { }
 
     async findAll(): Promise<Users[]> {
-        return await this.userRepo.find({
-            where: {
-                id: Not(1)
-            }
-        });
+        return await this.userRepo.find();
     }
 
     async findOne(id: number): Promise<Users> {

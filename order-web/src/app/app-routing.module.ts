@@ -22,8 +22,6 @@ const routes: Routes = [
       { path: 'add', component: OrderAddComponent},
     ]
   },
-  // { path: 'orders/add', component: OrderCreateComponent, canActivate: [AuthGuardGuard] },
-  // { path: 'orders', component: OrderListComponent, canActivate: [AuthGuardGuard] },
   { path: 'products', component: ProductsComponent},
   { path: 'statistics', component: StatisticsComponent},
   { path: 'agency', component: AgencyComponent },

@@ -99,7 +99,7 @@
                 {{'BUTTON.SAVE' | translate}}
             </button>
         </div> -->
-        <div *ngIf="error || (error !== null && error.length > 0)" class="error">
+        <div *ngIf="error || (error !== null && error.length !== 0)" class="error">
             <span>error</span>
         </div>
     </mat-dialog-content>

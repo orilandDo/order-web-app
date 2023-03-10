@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CONFIG } from './common/config';
+import { Helper, INavbarData } from './helpers/helper';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -26,8 +28,9 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    console.log('app.component')
     this.isLoginSuccess = false;
-    const session = sessionStorage.getItem('jwt');
+    const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
     if (session && Number(session) === 1) {
       this.isLoginSuccess = true;
     } else {

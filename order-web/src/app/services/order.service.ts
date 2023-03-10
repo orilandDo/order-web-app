@@ -73,7 +73,7 @@ export class OrderService {
             id: obj.id,
             status: obj.status,
         }
-        return this.webrequestService.put(this.url, payload);
+        return this.webrequestService.put(this.url + '/status', payload);
     }
 
     delete(id: number) {

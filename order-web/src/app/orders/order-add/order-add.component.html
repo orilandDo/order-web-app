@@ -27,7 +27,7 @@
             </span>
             <input matInput
                 class="col-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="contract" type="text" placeholder="HĐBB2023/XMHT" maxlength=50 [(ngModel)]="order.contract"
+                id="contract" type="text" placeholder="" maxlength=50 [(ngModel)]="order.contract"
                 [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
         </div>
         <div class="mb-3 row field" [hidden]="!isAdmin">
@@ -35,10 +35,11 @@
                 {{'ORDER.AGENCY' | translate}}
                 <label class="require">*</label>
             </span>
-            <input matInput
-                class="col-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="agency" type="text" placeholder="" maxlength=200 [(ngModel)]="order.agencyName"
-                [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
+            <select class="col-6 form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" [(ngModel)]="agencySelected" required>
+                <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_AGENCY' | translate}} --
+                </option>
+                <option [ngValue]="item" *ngFor="let item of agencyList">{{item.fullName}}</option>
+            </select>
         </div>
         <div class="mb-3 row field">
             <span class="col-4 text-label" for="deliveryId">
@@ -73,11 +74,13 @@
                     <input matInput
                         class="col-3 margin appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="quantity" type="number" max="1000" min="0" maxlength="4" [(ngModel)]="item.quantity"
-                        [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher"
-                        (focusout)="focusOut()" />
+                        [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" (focusout)="focusOut()" />
                     <span class="col-2 label-ton">(tấn)</span>
                 </div>
             </div>
+        </div>
+        <div *ngIf="error1 || (error1 !== null && error1.length !== 0)" class="mb-3 row field notification">
+            <span>{{error1}}</span>
         </div>
         <div class="mb-3 row field">
             <span class="col-4 text-label" for="productTotal">
@@ -86,7 +89,7 @@
             </span>
             <input matInput
                 class="col-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="productTotal" type="number" placeholder="(đơn vị tính theo tấn)" max="99999"
+                id="productTotal" type="number" placeholder="" max="99999"
                 [(ngModel)]="order.productTotal" [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
             <span class="col-2 text-label label-ton">(tấn)</span>
         </div>
@@ -96,7 +99,8 @@
                 <label class="require">*</label>
             </span>
             <select class="col-6 form-select" [(ngModel)]="transportSelected" required>
-                <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_TRANSPORT' | translate}} --</option>
+                <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_TRANSPORT' | translate}}
+                    --</option>
                 <option [ngValue]="item" *ngFor="let item of transport">{{item.label}}</option>
             </select>
         </div>
@@ -107,7 +111,7 @@
             </span>
             <input matInput
                 class="col-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="licensePlates" type="text" placeholder="KG1234" maxlength=50 [(ngModel)]="order.licensePlates"
+                id="licensePlates" type="text" placeholder="" maxlength=50 [(ngModel)]="order.licensePlates"
                 [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
         </div>
         <div class="mb-3 row field">
@@ -117,7 +121,7 @@
             </span>
             <input matInput
                 class="col-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="driver" type="text" placeholder="Nguyen Van A" maxlength="50" [(ngModel)]="order.driver"
+                id="driver" type="text" placeholder="" maxlength="50" [(ngModel)]="order.driver"
                 [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
         </div>
         <div class="mb-3 row field">
@@ -142,7 +146,7 @@
                 [ngModelOptions]="{standalone: true}"></textarea>
         </div>
 
-        <div class="mb-6 row field" [hidden]="!isAdmin">
+        <div class="mb-3 row field" [hidden]="!isAdmin">
             <span class="col-4 text-label" for="status">
                 {{'ORDER.STATUS' | translate}}
             </span>
@@ -152,10 +156,10 @@
                 </mat-radio-button>
             </mat-radio-group>
         </div>
-        <div *ngIf="error || (error !== null && error.length > 0)" class="notification">
-            <span>error</span>
+        <div *ngIf="error || (error !== null && error.length !== 0)" class="notification">
+            <span>{{error}}</span>
         </div>
-        <div class="btn-container">
+        <div class="btn-container mt-5">
             <button mat-button class="btn-cancel py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 (click)="onCancel()">{{'BUTTON.CANCEL' | translate}}</button>
             <button mat-button class="btn-save py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button"
@@ -163,14 +167,4 @@
             </button>
         </div>
     </mat-dialog-content>
-    <!-- <mat-dialog-actions>
-        <button mat-button mat-dialog-close class="btn-cancel py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            (click)="onCancel()">{{'BUTTON.CANCEL' | translate}}</button>
-        <button mat-button class="btn-save py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button"
-            (click)="onSubmit()">{{'BUTTON.ORDER'| translate }}
-        </button>
-    </mat-dialog-actions> -->
-    <!-- <div *ngIf="error || (error !== null && error.length > 0)" class="notification">
-        <span>error</span>
-    </div> -->
 </div>

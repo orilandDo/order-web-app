@@ -91,7 +91,7 @@
         "MESSAGE": "Bạn có chắc chắn muốn xóa "
     },
     "VALIDATE": {
-        "USERNAME": "Username can consist of letters and numbers only!"
+        "USERNAME": "Tên đăng nhập không thể chứa kí tự đặc biệt."
     },
     "MESSAGE" : {
         "ADD_PRODUCT": "Thêm mới sản phẩm",

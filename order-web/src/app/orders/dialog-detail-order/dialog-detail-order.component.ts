@@ -2,12 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cities, MSG_STATUS, STATUS, Transports } from '../../constants/const-data';
 import { PRODUCT_DATA } from '../../mock-data/products-data';
-import { Order } from '../../models/order';
+import { Order, ProductItem } from '../../models/order';
 import { MyErrorStateMatcher } from '../order-add/order-add.component';
 import * as moment from 'moment';
 import { Helper } from '../../helpers/helper';
 import { DeliveryData } from '../../mock-data/delivery-data';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DatePipe } from '@angular/common';
@@ -40,28 +40,26 @@ export class DialogDetailOrderComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   receivedDate: Date = new Date();
   error: any = '';
+  error1: any = '';
   isAdmin: boolean = new Helper().isAdmin();
   isUpdated: boolean = true;
 
   cities: any[] = Cities;
-  deliveries: any[] = DeliveryData;
-  products: any[] = PRODUCT_DATA;
+  deliveries: any[] = [];
+  productList: any[] = [];
   transport: any[] = Transports;
   status: any[] = STATUS;
-
-  // deliveryCityControl = new FormControl<ICity | null>(null, Validators.required);
-  // pickupCityControl = new FormControl<ICity | null>(null, Validators.required);
-  // productControl = new FormControl<Product | null>(null, Validators.required);
-  // transportControl = new FormControl<ITransport | null>(null, Validators.required);
+  agencyList: any[] = [];
 
   pickupSelected: any = null;
   deliverySelected: any = null;
   transportSelected: any = null;
-  selectedStatus: any = {};
+  statusSelected: any = {};
+  agencySelected: any = null;
 
   order: Order = {
     id: 0,
-    createdDate: moment().format('DD/MM/YYYY'),
+    createdDate: '',
     deliveryId: 0,
     pickupId: 0,
     productTotal: 0,
@@ -77,8 +75,8 @@ export class DialogDetailOrderComponent implements OnInit {
     agencyName: ''
   };
 
-  date = new FormControl();
-  // date = new FormControl(new Date('12/03/2023'));
+  date = new Date();
+  testForm!: FormGroup;
   helper = new Helper();
 
   constructor(
@@ -91,6 +89,9 @@ export class DialogDetailOrderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.agencyList = this.helper.getAgencyList();
+    this.productList = this.helper.getProductList();
+    this.deliveries = this.helper.getDeliveryList();
     if (this.data && this.data.id !== 0) {
       this.header = 'Cập nhật thông tin đơn hàng';
       this.order.id = this.data.id;
@@ -105,65 +106,45 @@ export class DialogDetailOrderComponent implements OnInit {
       this.order.receivedDate = this.data.receivedDate;
       this.order.status = this.data.status;
       this.order.note = this.data.note;
-      this.order.products = this.data.products;
       this.order.contract = this.data.contract;
       this.order.agencyId = this.data.agencyId;
       this.order.agencyName = this.data.agencyName;
-      this.selectedStatus = this.status.find(x => x.value === this.order.status);
+      this.statusSelected = this.status.find(x => x.value === this.order.status);
       this.deliverySelected = this.deliveries.find(y => y.id === this.order.deliveryId);
       this.pickupSelected = this.cities.find(y => y.id === this.order.pickupId);
       this.transportSelected = this.transport.find(y => y.id === this.order.transport);
-
-      const datePipe = new DatePipe('en-US');
-      this.date = this.order.receivedDate.length > 0 ? new FormControl(new Date(this.order.receivedDate)) : this.date;
-      // } else {
-      //   this.isUpdated = false;
-      //   this.order.products = this.products;
-      //   this.order.products.forEach(element => {
-      //     element.quantity = 0;
-      //     this.order.productTotal += element.quantity;
-      //   });
+      this.agencySelected = this.agencyList.find(x => x.id === this.order.agencyId);
+      this.order.products = this.data.products;
+      
+      // set valuefor receivedDate picker
+      const [day, month, year] = this.order.receivedDate.split('/');
+      const date = new Date(+year, +month - 1, +day);
+      this.testForm = new FormGroup({
+        date: new FormControl(date),
+      })
     }
   }
 
   onSubmit() {
-    this.order.status = this.selectedStatus.value;
-    this.order.deliveryId = Number(this.deliverySelected.id);
-    this.order.pickupId = Number(this.pickupSelected.id);
-    this.order.transport = Number(this.transportSelected.id);
-    this.order.receivedDate = this.date ? moment(this.date.value).format('DD/MM/YYYY') : '';
-
-    // Call api update record
-
-    // If return true, save record to storage
-    this.orderService.update(this.order).subscribe((response: any) => {
-      console.log(response)
-      if (response) {
-        this.order.id = response.id;
-        this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.SUCCESS));
-        this.helper.updateOrder(this.order);
-        this.dialogRef.close(this.order);
-      } else {
-        this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.FAIL));
-      }
-    });
-
-    //console.log(this.order)
-    // if (this.order.id === 0) {
-    //   // navigate to view component
-    //   const dialogRef = this.dialog.open(DialogConfirmOrderComponent, {
-    //     data: this.order,
-    //   });
-
-    //   dialogRef.afterClosed().subscribe(result => {
-    //     console.log('The dialog detail was closed');
-    //     //row = result;
-    //   });
-    // } else {
-    //   // call api update sql and return update data list
-
-    //   this.dialogRef.close(this.order);
-    // }
+    if (this.onValidationForm()) {
+      this.order.status = this.statusSelected.value;
+      this.order.deliveryId = Number(this.deliverySelected.id);
+      this.order.pickupId = Number(this.pickupSelected.id);
+      this.order.transport = Number(this.transportSelected.id);
+      this.order.products = this.order.products.filter(x => x.quantity !== 0);
+      this.order.receivedDate = moment(this.testForm.value.date).format("DD/MM/YYYY");
+      this.orderService.update(this.order).subscribe((response: any) => {
+        console.log(response)
+        if (response.affected !== 0) {
+          this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.SUCCESS));
+          this.helper.updateOrder(this.order);
+          this.helper.updateProductOrder(this.order.products);
+          this.dialogRef.close(this.order);
+        } else {
+          this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.FAIL));
+        }
+      });
+    }
   }
 
   onCancel() {
@@ -176,6 +157,30 @@ export class DialogDetailOrderComponent implements OnInit {
     this.order.products.forEach(element => {
       this.order.productTotal += element.quantity;
     });
+  }
+
+  onValidationForm(): boolean {
+    let isValidForm: boolean = true;
+    if (this.order.contract.length === 0
+      || !this.agencySelected
+      || !this.deliverySelected
+      || !this.pickupSelected
+      || !this.transportSelected
+      || this.order.licensePlates.length === 0
+      || this.order.driver.length === 0) {
+      isValidForm = false;
+      this.error = 'Vui lòng nhập đầy đủ thông tin bắt buộc (*)';
+      return false;
+    }
+    if (this.order.productTotal === 0) {
+      isValidForm = false;
+      this.error1 = 'Vui lòng nhập số lượng sản phẩm';
+      return false;
+    } else {
+      this.error = '';
+      isValidForm = true;
+      return true;
+    }
   }
 
 }

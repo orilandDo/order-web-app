@@ -42,8 +42,9 @@ export class DialogConfirmOrderComponent implements OnInit {
   products: any[] = PRODUCT_DATA;
   transport: any[] = Transports;
   status: any[] = STATUS;
-  helper: Helper = new Helper();
+  agencyList: any[] = [];
 
+  helper: Helper = new Helper();
   isAdmin: boolean = new Helper().isAdmin();
   isUpdated: boolean = true;
   selectedStatus: any = {};
@@ -61,6 +62,7 @@ export class DialogConfirmOrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.agencyList = this.helper.getAgencyList();
     if (this.data && this.data.id !== 0) {
       this.order.id = this.data.id;
       this.order.createdDate = this.data.createdDate;
@@ -77,7 +79,7 @@ export class DialogConfirmOrderComponent implements OnInit {
       this.order.products = this.data.products;
       this.order.contract = this.data.contract;
       this.order.agencyId = this.data.agencyId;
-      this.order.agencyName = this.data.agencyName;
+      this.order.agencyName = this.agencyList.find(x => x.id === this.data.agencyId).fullName;
       this.selectedStatus = this.status.find(x => x.value === this.order.status);
       this.selectedDelivery = this.deliveries.find(x => x.id === this.order.deliveryId);
       this.selectedPickup = this.cities.find(x => x.id === this.order.pickupId);
@@ -88,15 +90,11 @@ export class DialogConfirmOrderComponent implements OnInit {
   }
 
   onSubmit() {
-    // if (this.order.status === 2) {
     this.order.status = this.selectedStatus.value;
-    console.log(this.order)
-    // call api update status by id
     this.orderService.updateStatus(this.order).subscribe((response: any) => {
       console.log(response)
-      if (response) {
+      if (response.affected !== 0) {
         this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.SUCCESS));
-        // update to storage
         this.helper.updateStatusOrder(this.order.id, this.order.status);
         this.dialogRef.close(this.order);
       } else {

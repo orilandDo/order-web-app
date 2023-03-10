@@ -4,8 +4,8 @@ import { DeleteResult, Raw, Repository, UpdateResult } from 'typeorm';
 import { ModifyOrderDto } from './dto/modify-order.dto';
 import { Order } from './entities/order.entity';
 import { SearchOrderDto } from './dto/search-order.dto';
-import { OrderRo } from './ro/order.ro';
 import { ProductOrder } from './entities/product-order.entity';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class OrdersService {
@@ -14,46 +14,70 @@ export class OrdersService {
     public readonly orderRepo: Repository<Order>,
     @InjectRepository(ProductOrder)
     public readonly productOrderRepo: Repository<ProductOrder>,
+    private readonly productService: ProductsService,
   ) { }
 
-  async findAll(): Promise<OrderRo> {
-    const response = new OrderRo;
+  async findAll(): Promise<Order[]> {
+    let response: Order[] = [];
     const orderList = await this.orderRepo.find();
+    response = orderList;
+    const productList = await this.productService.findAll();
     const productOrderList = await this.productOrderRepo.find();
-    response.ordersList = orderList;
-    response.productOrderList = productOrderList;
-    return response;
-  }
-
-  async findOne(id: number): Promise<OrderRo> {
-    const response = new OrderRo;
-    const orderList = await this.orderRepo.find({
-      where: {
-        id
-      },
+    orderList.forEach(el => {
+      el.products = [];
+      const items = productOrderList.filter(x => x.orderId === el.id);
+      if (items.length > 0) {
+        items.forEach(i => {
+          const temp = {
+            id: i.productId,
+            name: productList.find(x => x.id === i.productId).name,
+            quantity: i.quantity,
+          };
+          el.products.push(temp);
+        });
+      }
     });
-    const productOrderList = await this.productOrderRepo.find();
-    response.ordersList = orderList;
-    response.productOrderList = productOrderList;
     return response;
   }
 
-  async create(modifyOrderDto: ModifyOrderDto): Promise<Order> {
-    const product = this.mappingOrder(modifyOrderDto);
-    const order = await this.orderRepo.save(product);
+  async findOne(id: number): Promise<Order> {
+    let response = new Order();
+    const orderList = await this.orderRepo.findOneBy({ id });
+    response = orderList;
+    const productList = await this.productService.findAll();
+    const productOrderList = await this.productOrderRepo.find();
+    const items = productOrderList.filter(x => x.orderId === response.id);
+    if (items.length > 0) {
+      items.forEach(i => {
+        const temp = {
+          id: i.productId,
+          name: productList.find(x => x.id === i.productId).name,
+          quantity: i.quantity,
+        };
+        response.products.push(temp);
+      });
+    }
+    return response;
+  }
+
+  async create(modifyOrderDto: ModifyOrderDto): Promise<ModifyOrderDto> {
+    const orderEntity = this.mappingOrder(modifyOrderDto);
+    const order = await this.orderRepo.save(orderEntity);
     const entities: ProductOrder[] = [];
     modifyOrderDto.products.forEach(element => {
       const item = new ProductOrder();
       item.orderId = order.id;
       item.productId = element.id;
       item.quantity = element.quantity;
+      entities.push(item);
     });
     await this.productOrderRepo.save(entities);
-    return order;
+    modifyOrderDto.id = order.id;
+    return modifyOrderDto;
   }
 
   async update(modifyOrderDto: ModifyOrderDto): Promise<UpdateResult> {
-    const product = this.mappingOrder(modifyOrderDto);
+    const order = this.mappingOrder(modifyOrderDto);
     modifyOrderDto.products.forEach(async element => {
       await this.productOrderRepo.createQueryBuilder()
         .update(ProductOrder)
@@ -62,7 +86,15 @@ export class OrdersService {
         .andWhere("product_id = :productId", { productId: element.id })
         .execute();
     })
-    return await this.orderRepo.update(modifyOrderDto.id, product);
+    return await this.orderRepo.update(modifyOrderDto.id, order);
+  }
+
+  async updateStatus(body: any) {
+    return await this.orderRepo.createQueryBuilder()
+      .update(Order)
+      .set({ status: body.status })
+      .where("id = :orderId", { orderId: body.id })
+      .execute();
   }
 
   async delete(id: number): Promise<DeleteResult> {
@@ -73,44 +105,38 @@ export class OrdersService {
     return await this.orderRepo.delete(id);
   }
 
-  async search(searchOderDto: SearchOrderDto): Promise<OrderRo> {
-    const response = new OrderRo;
-    const orderLists = await this.orderRepo.find({
-      where: [
-        { id: searchOderDto.orderId },
-        { agencyId: searchOderDto.agencyId },
-        { status: searchOderDto.status },
-        {
-          createdDate: Raw((alias) => `${alias} >= :date1 AND ${alias} <= :date2`, { date1: searchOderDto.startDate, date2: searchOderDto.endDate }),
-        },
-      ]
-    });
+  async search(searchOderDto: SearchOrderDto): Promise<Order[]> {
+    let response: Order[] = [];
+    const productList = await this.productService.findAll();
 
     let sql = this.orderRepo.createQueryBuilder('order')
-    .select('order')
-    .addSelect('productOrder')
-    .leftJoin(ProductOrder , 'productOrder', 'productOrder.order_id = order.id')
-    .where('1=1');
+      .select('order')
+      .addSelect('productOrder')
+      .leftJoin(ProductOrder, 'productOrder', 'productOrder.order_id = order.id')
+      .where('1=1');
 
     if (searchOderDto.orderId && searchOderDto.orderId !== 0) {
-      sql = sql.andWhere('order.id = :orderId', { orderId: searchOderDto.orderId})
-    } else if (searchOderDto.agencyId && searchOderDto.agencyId !== 0) {
-      sql = sql.andWhere('order.agency_id = :agencyId', { agencyId: searchOderDto.agencyId})
-    } else if (searchOderDto.status && searchOderDto.status !== 0) {
-      sql = sql.andWhere('order.status = :status', { status: searchOderDto.status})
-    } else if (searchOderDto.productId && searchOderDto.productId !== 0) {
-      sql = sql.andWhere('productOrder.product_id = :productId', { productId: searchOderDto.productId})
-    } else if (searchOderDto.startDate.length !== 0 && searchOderDto.endDate.length !== 0) {
-      sql = sql.andWhere('order.created_date BETWEEN :start AND :end ', { start: searchOderDto.startDate, end: searchOderDto.endDate})
+      sql = sql.andWhere('order.id = :orderId', { orderId: searchOderDto.orderId })
+    }
+    if (searchOderDto.agencyId && searchOderDto.agencyId !== 0) {
+      sql = sql.andWhere('order.agency_id = :agencyId', { agencyId: searchOderDto.agencyId })
+    }
+    if (searchOderDto.status && searchOderDto.status !== 0) {
+      sql = sql.andWhere('order.status = :status', { status: searchOderDto.status })
+    }
+    if (searchOderDto.productId && searchOderDto.productId !== 0) {
+      sql = sql.andWhere('productOrder.product_id = :productId', { productId: searchOderDto.productId })
+    }
+    if (searchOderDto.startDate && searchOderDto.startDate.length !== 0
+      && searchOderDto.endDate && searchOderDto.endDate.length !== 0) {
+      sql = sql.andWhere('order.created_date BETWEEN :start AND :end ', { start: searchOderDto.startDate, end: searchOderDto.endDate })
     }
     const orderList = await sql.getRawMany();
-    const productOrderList = await this.productOrderRepo.find({
-      where: [
-        { productId: searchOderDto.productId }
-      ]
-    });
-    response.ordersList = orderList;
-    response.productOrderList = productOrderList;
+    console.log(sql.getSql())
+    console.log(orderList)
+
+    const dataMap = this.mappingSearch(orderList, productList);
+    response = dataMap;
     return response;
   }
 
@@ -131,6 +157,47 @@ export class OrdersService {
     order.agencyId = modifyOrderDto.agencyId;
     console.log(order)
     return order;
+  }
+
+  private mappingSearch(data: any[], productList: any[]) {
+    let list1: Order[] = [];
+    data.forEach(el => {
+      const item = new Order();
+      item.id = el.order_id;
+      item.agencyId = el.order_agency_id;
+      item.createdDate = el.order_created_date;
+      item.deliveryId = el.order_delivery_id;
+      item.productTotal = el.order_product_total;
+      item.transport = el.order_transport;
+      item.licensePlates = el.order_license_plates;
+      item.driver = el.order_driver;
+      item.receivedDate = el.order_received_date;
+      item.status = el.order_status;
+      item.note = el.order_note;
+      item.contract = el.order_contract;
+      item.products = [];
+      list1.push(item);
+    });
+
+    // Bo phan tu trung nhau
+    const ids = list1.map(o => o.id);
+    list1 = list1.filter(({ id }, index) => !ids.includes(id, index + 1));
+
+    list1.forEach(el => {
+      const proList = data.filter(x => x.order_id === el.id);
+      if (proList.length > 0) {
+        proList.forEach(i => {
+          const item2 = {
+            id: i.productOrder_product_id,
+            quantity: i.productOrder_quantity,
+            name: productList.find(x => x.id === i.productOrder_product_id).name,
+          }
+          el.products.push(item2);
+        });
+      }
+    });
+
+    return list1;
   }
 }
 

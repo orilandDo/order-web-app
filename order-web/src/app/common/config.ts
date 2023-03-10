@@ -21,6 +21,7 @@ export const CONFIG = {
         PRODUCT_LIST: 'productList',
         PRODUCT_ORDER_LIST: 'productOrderList',
         USER_LIST: 'userList',
+        DELIVERY_LIST: 'deliveryList',
         MENU_LIST: 'menuList',
         LOGIN_INFO: 'loginInfo',
         TOKEN: 'token',

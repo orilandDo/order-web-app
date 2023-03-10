@@ -1,20 +1,20 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ModifyOrderDto } from './dto/modify-order.dto';
 import { SearchOrderDto } from './dto/search-order.dto';
+import { Order } from './entities/order.entity';
 import { OrdersService } from './orders.service';
-import { OrderRo } from './ro/order.ro';
 
 @Controller('orders')
 export class OrdersController {
     constructor(private readonly ordersService: OrdersService) {}
   
     @Get()
-    findAll(): Promise<OrderRo> {
+    findAll(): Promise<Order[]> {
       return this.ordersService.findAll()
     }
   
     @Get(':id')
-    get(@Param('id', ParseIntPipe) id: number): Promise<OrderRo> {
+    get(@Param('id', ParseIntPipe) id: number): Promise<Order> {
       return this.ordersService.findOne(id);
     }
   
@@ -27,6 +27,11 @@ export class OrdersController {
     update(@Body() modifyProductDto: ModifyOrderDto) {
       return this.ordersService.update(modifyProductDto);
     }
+
+    @Put('/status')
+    updateStatus(@Body() body) {
+      return this.ordersService.updateStatus(body);
+    }
   
     @Delete(':id')
     deleteUser(@Param('id') id: number) {
@@ -34,7 +39,7 @@ export class OrdersController {
     }
 
     @Post('/search')
-    search(@Body() searchOderDto: SearchOrderDto): Promise<OrderRo> {
+    search(@Body() searchOderDto: SearchOrderDto): Promise<Order[]> {
       return this.ordersService.search(searchOderDto);
     }
 }

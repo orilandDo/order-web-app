@@ -5,8 +5,8 @@ export class Menu {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column() 
-  level: number;
+  @Column({name: 'parent_id'}) 
+  parentId: number;
 
   @Column({name: 'route_link', length: 100})
   routeLink: string;

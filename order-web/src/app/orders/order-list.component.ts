@@ -17,6 +17,10 @@ import * as moment from 'moment';
 import { AGENCY_DATA } from '../mock-data/agency-data';
 import { FormControl, FormGroup } from '@angular/forms';
 import { OrderService } from '../services/order.service';
+import { ProductService } from '../services/product.service';
+import { AgencyService } from '../services/agency.service';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-list',
@@ -38,11 +42,13 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   cities: any[] = Cities;
   deliveries: any[] = DeliveryData;
   products: any[] = PRODUCT_DATA;
+  productList: any[] = [];
   status: any[] = STATUS;
   helper = new Helper();
   isAdmin: boolean = new Helper().isAdmin();
 
-  agencyList: any[] = AGENCY_DATA;
+  agencyList: any[] = [];
+  // agencyList: any[] = AGENCY_DATA;
   agencySelected: any = null;
 
   productSelected: any = null;
@@ -63,16 +69,23 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   });
 
   constructor(public dialog: MatDialog,
-    public router: Router, 
+    public router: Router,
     private route: ActivatedRoute,
     private orderService: OrderService,
-    ) { }
+    private productService: ProductService,
+    private agencyService: AgencyService,
+    private toastr: ToastrService,
+    public translate: TranslateService,
+  ) { }
 
   ngOnInit(): void {
+    this.productList = this.helper.getProductList();
+    this.agencyList = this.helper.getAgencyList();
     const orderList = this.helper.getOrderList();
     if (orderList.length === 0) {
       this.orderService.getOrderList().subscribe((response: any) => {
         console.log(response)
+        this.helper.setOrderList(response);
         this.dataSource.data = response.length > 0 ? response.reverse() : [];
       });
     } else {
@@ -85,18 +98,6 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  // openDialog(row: any): void {
-  //   console.log(row)
-  //   const dialogRef = this.dialog.open(DialogDetailOrderComponent, {
-  //     data: row,
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log('The dialog was closed');
-  //     //row = result;
-  //   });
-  // }
-
   @HostListener('click', ['$event'])
   onClick(event: any) {
     const element = document.getElementsByClassName('mat-mdc-paginator-page-size-label');
@@ -106,7 +107,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   }
 
   onAdd() {
-    this.router.navigate(['orders/add']); 
+    this.router.navigate(['orders/add']);
   }
 
   onEdit(row: any) {
@@ -165,11 +166,6 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     alert('In chi tiết đơn hàng dạng pdf')
   }
 
-  // onDownloadPDF(row: any) {
-  //   // xuat danh sach don dat hang
-  //   console.log('Download pdf')
-  // }
-
   exportExcel() {
     alert('Tải xuống danh sách đơn hàng, định dạng excel')
   }
@@ -181,7 +177,30 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     this.searchForm.startDate = this.range.value.start !== null ? moment(this.range.value.start).format('DD/MM/YYYY') : '';
     this.searchForm.endDate = this.range.value.end !== null ? moment(this.range.value.end).format('DD/MM/YYYY') : '';
     console.log(this.searchForm)
-    alert('Tìm kiếm đơn hàng')
+    this.orderService.search(this.searchForm).subscribe((response: any) => {
+      console.log(response)
+      if (response.length > 0) {
+        this.dataSource.data = response.reverse();
+        this.resetFormSearch();
+      } else {
+        this.helper.showWarning(this.toastr, "Không có thông tin cần tìm.");
+        this.resetFormSearch();
+      }
+    });
+  }
+
+  resetFormSearch() {
+    this.agencySelected = null;
+    this.productSelected = null;
+    this.selectedStatus = null;
+    this.range.value.start = null;
+    this.range.value.end = null;
+    this.searchForm.orderId = 0;
+    this.searchForm.agencyId = 0;
+    this.searchForm.productId = 0;
+    this.searchForm.status = 0;
+    this.searchForm.startDate = null;
+    this.searchForm.endDate = null;
   }
 
   compareObj(obj1: any[], obj2: any): string {
