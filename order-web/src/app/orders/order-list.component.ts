@@ -183,6 +183,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
         this.dataSource.data = response.reverse();
         this.resetFormSearch();
       } else {
+        this.dataSource.data = [];
         this.helper.showWarning(this.toastr, "Không có thông tin cần tìm.");
         this.resetFormSearch();
       }

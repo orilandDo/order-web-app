@@ -27,9 +27,6 @@ export class AgencyService {
     }
 
     async create(modifyAgencyDto: ModifyAgencyDto): Promise<Agency> {
-        const agencyEntity = this.mappingAgency(modifyAgencyDto);
-        const agency = await this.agencyRepo.save(agencyEntity)
-
         const userEntity = {
             username: modifyAgencyDto.accountName,
             password: modifyAgencyDto.password,
@@ -38,7 +35,10 @@ export class AgencyService {
             expiresAt: 0
         }
         const user = await this.userService.create(userEntity);
-        agency.userId = user.id;
+
+        const agencyEntity = this.mappingAgency(modifyAgencyDto);
+        agencyEntity.userId = user.id;
+        const agency = await this.agencyRepo.save(agencyEntity)
         return agency;
     }
 

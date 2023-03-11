@@ -42,8 +42,8 @@ export class AuthService {
                 code: 200, data: {
                     loginInfo: {
                         isAdmin: userEntity.isAdmin,
-                        accountName: agency.fullName,
-                        agencyId: agency.id,
+                        accountName: agency ? agency.fullName : '',
+                        agencyId: agency ? agency.id : 0,
                     },
                     menuList,
                     userList,
