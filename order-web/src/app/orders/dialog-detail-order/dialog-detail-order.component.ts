@@ -114,8 +114,8 @@ export class DialogDetailOrderComponent implements OnInit {
       this.pickupSelected = this.cities.find(y => y.id === this.order.pickupId);
       this.transportSelected = this.transport.find(y => y.id === this.order.transport);
       this.agencySelected = this.agencyList.find(x => x.id === this.order.agencyId);
-      this.order.products = this.data.products;
-      
+      this.setProductOrder();
+
       // set valuefor receivedDate picker
       const [day, month, year] = this.order.receivedDate.split('/');
       const date = new Date(+year, +month - 1, +day);
@@ -123,6 +123,30 @@ export class DialogDetailOrderComponent implements OnInit {
         date: new FormControl(date),
       })
     }
+  }
+
+  setProductOrder() {
+    this.order.products = this.productList;
+    let listMap = this.order.products.map((e, i) => {
+      let temp = this.data.products.find(element => element.id === e.id)
+      if (temp) {
+        e.quantity = temp.quantity;
+      } else {
+        e.quantity = 0;
+      }
+      return e;
+    });
+
+    const list: ProductItem[] = [];
+    listMap.forEach(element => {
+      const item = {
+        id: element.id,
+        name: element.name,
+        quantity: element.quantity,
+      };
+      list.push(item);
+    });
+    this.order.products = list;
   }
 
   onSubmit() {
