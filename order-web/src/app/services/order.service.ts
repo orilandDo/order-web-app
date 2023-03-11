@@ -72,6 +72,7 @@ export class OrderService {
             contract: obj.contract,
             agencyId: obj.agencyId,
             products: obj.products,
+            isAdmin: this.helper.isAdmin(),
         };
         const userId = this.helper.getUserId();
         if (userId !== 0) {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -21,6 +21,7 @@ import { ProductService } from '../services/product.service';
 import { AgencyService } from '../services/agency.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-order-list',
@@ -38,6 +39,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('TABLE', { static: false }) TABLE!: ElementRef;
 
   cities: any[] = Cities;
   deliveries: any[] = DeliveryData;
@@ -54,6 +56,8 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   productSelected: any = null;
   selectedStatus: any = null;
 
+  fileName: string = 'Danh-sach-don-dat-hang.xlsx';
+
   searchForm: any = {
     orderId: 0,
     agencyId: 0,
@@ -62,7 +66,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     startDate: '',
     endDate: ''
   }
-  //select = {};
+
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
@@ -81,16 +85,16 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.productList = this.helper.getProductList();
     this.agencyList = this.helper.getAgencyList();
-    const orderList = this.helper.getOrderList();
-    if (orderList.length === 0) {
+    // const orderList = this.helper.getOrderList();
+    // if (orderList.length === 0) {
       this.orderService.getOrderList().subscribe((response: any) => {
         console.log(response)
         this.helper.setOrderList(response);
         this.dataSource.data = response.length > 0 ? response.reverse() : [];
       });
-    } else {
-      this.dataSource.data = orderList.length > 0 ? orderList.reverse() : [];
-    }
+    // } else {
+    //   this.dataSource.data = orderList.length > 0 ? orderList.reverse() : [];
+    // }
   }
 
   ngAfterViewInit() {
@@ -119,7 +123,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
-        this.dataSource.data = this.helper.getOrderList();
+        this.dataSource.data = this.helper.getOrderList().reverse();
       });
     } else {
       const dialogRef = this.dialog.open(DialogDetailOrderComponent, {
@@ -166,8 +170,13 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     alert('In chi tiết đơn hàng dạng pdf')
   }
 
-  exportExcel() {
-    alert('Tải xuống danh sách đơn hàng, định dạng excel')
+  exportToExcel() {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.TABLE.nativeElement);
+    ws['!cols'] = [];
+    ws['!cols'][11] = { hidden: true };
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, this.fileName);
   }
 
   onSearch() {

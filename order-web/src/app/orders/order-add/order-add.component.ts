@@ -79,6 +79,9 @@ export class OrderAddComponent implements OnInit {
     this.productList = this.helper.getProductList();
     this.deliveries = this.helper.getDeliveryList();
     this.setProductOrder();
+    if (!this.helper.isAdmin()) {
+      this.order.contract = this.agencyList[0].contract;
+    }
   }
 
   setProductOrder() {
@@ -150,6 +153,10 @@ export class OrderAddComponent implements OnInit {
       isValidForm = true;
     }
     return isValidForm;
+  }
+
+  onChange(event: any) {
+    this.order.contract = event.contract;
   }
 
 }

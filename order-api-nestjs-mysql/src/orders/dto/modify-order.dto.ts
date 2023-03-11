@@ -19,6 +19,7 @@ export class ModifyOrderDto {
   updatedDate?: string;
   agencyId?: number;
   agencyName?: string;
+  isAdmin?: boolean;
 }
 
 export interface ProductItem {

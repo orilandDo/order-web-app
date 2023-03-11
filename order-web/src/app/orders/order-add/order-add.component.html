@@ -20,26 +20,28 @@
                 id="createdDate" type="text" maxlength=15 [(ngModel)]="order.createdDate"
                 [ngModelOptions]="{standalone: true}" />
         </div>
-        <div class="mb-3 row field">
-            <span class="col-4 text-label" for="contract">
-                {{'ORDER.CONTRACT' | translate}}
-                <label class="require">*</label>
-            </span>
-            <input matInput
-                class="col-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="contract" type="text" placeholder="" maxlength=50 [(ngModel)]="order.contract"
-                [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
-        </div>
         <div class="mb-3 row field" [hidden]="!isAdmin">
             <span class="col-4 text-label" for="agency">
                 {{'ORDER.AGENCY' | translate}}
                 <label class="require">*</label>
             </span>
-            <select class="col-6 form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" [(ngModel)]="agencySelected" required>
+            <select
+                class="col-6 form-select appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                [(ngModel)]="agencySelected" (ngModelChange)="onChange($event)" required>
                 <option [ngValue]="null" [disabled]="true" [selected]="true">-- {{'ORDER.SELECT_AGENCY' | translate}} --
                 </option>
                 <option [ngValue]="item" *ngFor="let item of agencyList">{{item.fullName}}</option>
             </select>
+        </div>
+        <div class="mb-3 row field">
+            <span class="col-4 text-label" for="contract">
+                {{'ORDER.CONTRACT' | translate}}
+                <label class="require">*</label>
+            </span>
+            <input matInput [disabled]="true"
+                class="col-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="contract" type="text" placeholder="" maxlength=50 [(ngModel)]="order.contract"
+                [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
         </div>
         <div class="mb-3 row field">
             <span class="col-4 text-label" for="deliveryId">
@@ -89,8 +91,8 @@
             </span>
             <input matInput
                 class="col-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="productTotal" type="number" placeholder="" max="99999"
-                [(ngModel)]="order.productTotal" [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
+                id="productTotal" type="number" placeholder="" max="99999" [(ngModel)]="order.productTotal"
+                [ngModelOptions]="{standalone: true}" [errorStateMatcher]="matcher" />
             <span class="col-2 text-label label-ton">(tấn)</span>
         </div>
         <div class="mb-3 row field">

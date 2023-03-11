@@ -96,7 +96,11 @@ export class OrdersService {
     return modifyOrderDto;
   }
 
-  async update(modifyOrderDto: ModifyOrderDto): Promise<UpdateResult> {
+  async update(modifyOrderDto: ModifyOrderDto): Promise<UpdateResult | any> {
+    const orderOld = await this.orderRepo.findOneBy({id: modifyOrderDto.id});
+    if (orderOld.status > 1 && !modifyOrderDto.isAdmin) {
+      return { code: 404, error: 'Not allow update'}
+    }
     const order = this.mappingOrder(modifyOrderDto);
     modifyOrderDto.products.forEach(async element => {
       await this.productOrderRepo.createQueryBuilder()

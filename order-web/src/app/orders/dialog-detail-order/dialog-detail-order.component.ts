@@ -42,7 +42,6 @@ export class DialogDetailOrderComponent implements OnInit {
   error: any = '';
   error1: any = '';
   isAdmin: boolean = new Helper().isAdmin();
-  isUpdated: boolean = true;
 
   cities: any[] = Cities;
   deliveries: any[] = [];
@@ -159,13 +158,17 @@ export class DialogDetailOrderComponent implements OnInit {
       this.order.receivedDate = moment(this.testForm.value.date).format("DD/MM/YYYY");
       this.orderService.update(this.order).subscribe((response: any) => {
         console.log(response)
-        if (response.affected !== 0) {
+        if (response.affected && response.affected !== 0) {
           this.helper.showSuccess(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.SUCCESS));
           this.helper.updateOrder(this.order);
           this.helper.updateProductOrder(this.order.products);
           this.dialogRef.close(this.order);
+        } else if (response.code === 404) {
+          this.helper.showWarning(this.toastr, 'Không thể cập nhật thông tin đơn hàng do đơn hàng này đã được duyệt.');
+          this.dialogRef.close(null);
         } else {
           this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.FAIL));
+          this.dialogRef.close(null);
         }
       });
     }
@@ -205,6 +208,10 @@ export class DialogDetailOrderComponent implements OnInit {
       isValidForm = true;
       return true;
     }
+  }
+
+  onChange(event: any) {
+    this.order.contract = event.contract;
   }
 
 }

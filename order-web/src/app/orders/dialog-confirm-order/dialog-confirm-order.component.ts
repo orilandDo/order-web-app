@@ -46,7 +46,6 @@ export class DialogConfirmOrderComponent implements OnInit {
 
   helper: Helper = new Helper();
   isAdmin: boolean = new Helper().isAdmin();
-  isUpdated: boolean = true;
   selectedStatus: any = {};
   selectedDelivery: any = {};
   selectedPickup: any = {};
@@ -84,8 +83,6 @@ export class DialogConfirmOrderComponent implements OnInit {
       this.selectedDelivery = this.deliveries.find(x => x.id === this.order.deliveryId);
       this.selectedPickup = this.cities.find(x => x.id === this.order.pickupId);
       this.selectedTransport = this.transport.find(x => x.id === this.order.transport);
-    } else {
-      this.isUpdated = false;
     }
   }
 
@@ -99,8 +96,8 @@ export class DialogConfirmOrderComponent implements OnInit {
         this.dialogRef.close(this.order);
       } else {
         this.helper.showError(this.toastr, this.helper.getMessage(this.translate, 'MESSAGE.MODIFIED_ORDER', MSG_STATUS.FAIL));
+        this.dialogRef.close(null);
       }
     });
-    // }
   }
 }
