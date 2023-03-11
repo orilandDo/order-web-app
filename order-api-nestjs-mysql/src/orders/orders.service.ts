@@ -17,9 +17,18 @@ export class OrdersService {
     private readonly productService: ProductsService,
   ) { }
 
-  async findAll(): Promise<Order[]> {
+  async findAll(userId: number): Promise<Order[]> {
     let response: Order[] = [];
-    const orderList = await this.orderRepo.find();
+    let orderList: any;
+    if (userId !== 0) {
+      orderList = await this.orderRepo.find({
+        where: {
+          agencyId: userId
+        }
+      });
+    } else {
+      orderList = await this.orderRepo.find();
+    }
     response = orderList;
     const productList = await this.productService.findAll();
     const productOrderList = await this.productOrderRepo.find();
@@ -40,9 +49,20 @@ export class OrdersService {
     return response;
   }
 
-  async findOne(id: number): Promise<Order> {
+  async findOne(id: number, userId: number): Promise<Order> {
     let response = new Order();
-    const orderList = await this.orderRepo.findOneBy({ id });
+    // const orderList = await this.orderRepo.findOneBy({ id });
+    let orderList: any;
+    if (userId !== 0) {
+      orderList = await this.orderRepo.find({
+        where: {
+          id,
+          agencyId: userId
+        }
+      });
+    } else {
+      orderList = await this.orderRepo.findOneBy({ id });
+    }
     response = orderList;
     const productList = await this.productService.findAll();
     const productOrderList = await this.productOrderRepo.find();
@@ -115,6 +135,9 @@ export class OrdersService {
       .leftJoin(ProductOrder, 'productOrder', 'productOrder.order_id = order.id')
       .where('1=1');
 
+    if (searchOderDto.userId && searchOderDto.userId !== 0) {
+      sql = sql.andWhere('order.agencyId = :agencyId', { agencyId: searchOderDto.userId })
+    }
     if (searchOderDto.orderId && searchOderDto.orderId !== 0) {
       sql = sql.andWhere('order.id = :orderId', { orderId: searchOderDto.orderId })
     }

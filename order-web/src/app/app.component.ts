@@ -1,7 +1,7 @@
-import { Component, Output } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CONFIG } from './common/config';
-import { Helper, INavbarData } from './helpers/helper';
+import { Helper } from './helpers/helper';
+import { LoginService } from './services/login.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -16,11 +16,14 @@ interface SideNavToggle {
 export class AppComponent {
   isSideNavCollapsed = false;
   screenWidth = 0;
-  isLoginSuccess: boolean = false;
+  isAuthenticated: boolean = false;
+  helper = new Helper();
 
-  constructor(public translate: TranslateService) {
-     translate.setDefaultLang('i18n');
-   }
+  constructor(public translate: TranslateService,
+    public loginService: LoginService,
+    private cdr: ChangeDetectorRef) {
+    translate.setDefaultLang('i18n');
+  }
 
   onToggleSideNav(data: SideNavToggle): void {
     this.screenWidth = data.screenWidth;
@@ -28,13 +31,11 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    console.log('app.component')
-    this.isLoginSuccess = false;
-    const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
-    if (session && Number(session) === 1) {
-      this.isLoginSuccess = true;
-    } else {
-      this.isLoginSuccess = false;
-    }
+    this.helper.checkSession();
   }
+
+  ngAfterViewChecked(){
+    //your code to update the model
+    this.cdr.detectChanges();
+ }
 }

@@ -29,9 +29,15 @@ export class AuthService {
             const agency = agencyList.find(x => x.userId === userEntity.id);
             const productList = await this.productService.findAll();
             const admin = userList.find(x => x.isAdmin === true);
-            // khong lay du lieu admin
-            agencyList = agencyList.filter(x => x.userId !== admin.id);
-            userList = userList.filter(x => x.isAdmin === false);
+            if (!userEntity.isAdmin) {
+                // Chilay dung du lieu cua user dang nhap
+                agencyList = [agencyList.find(x => x.userId !== admin.id && x.userId === userEntity.id)];
+                userList = userList.filter(x => x.isAdmin === false && x.id === userEntity.id);
+            } else {
+                 // Loc bo du lieu cua admin
+                agencyList = agencyList.filter(x => x.userId !== admin.id);
+                userList = userList.filter(x => x.isAdmin === false);
+            }
             return {
                 code: 200, data: {
                     loginInfo: {

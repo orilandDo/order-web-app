@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CONFIG } from '../common/config';
+import { Helper } from '../helpers/helper';
 import { Order } from '../models/order';
 import { Search } from '../models/search';
 import { WebRequestService } from './web-request.service';
@@ -8,13 +9,15 @@ import { WebRequestService } from './web-request.service';
 export class OrderService {
     readonly url: string = CONFIG.URL.ORDERS.ORDER;
     readonly url1: string = CONFIG.URL.ORDERS.SEARCH;
+    readonly helper = new Helper();
 
     constructor(
         private webrequestService: WebRequestService,
     ) { }
 
     getOrderList() {
-        return this.webrequestService.get(this.url);
+        
+        return this.webrequestService.get(this.url + `/${this.helper.getUserId()}`);
     }
 
     search(obj: Search) {
@@ -25,6 +28,7 @@ export class OrderService {
             agencyId: obj.agencyId,
             productId: obj.productId,
             status: obj.status,
+            userId: this.helper.getUserId(),
         };
         return this.webrequestService.post(this.url1, payload);
     }
@@ -45,6 +49,10 @@ export class OrderService {
             agencyId: obj.agencyId,
             products: obj.products,
         };
+        const userId = this.helper.getUserId();
+        if (userId !== 0) {
+            payload.agencyId = userId;
+        }
         return this.webrequestService.post(this.url, payload);
     }
 
@@ -65,6 +73,10 @@ export class OrderService {
             agencyId: obj.agencyId,
             products: obj.products,
         };
+        const userId = this.helper.getUserId();
+        if (userId !== 0) {
+            payload.agencyId = userId;
+        }
         return this.webrequestService.put(this.url, payload);
     }
 

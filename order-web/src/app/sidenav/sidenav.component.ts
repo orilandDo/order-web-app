@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, DoCheck, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { fadeInOut, Helper, INavbarData, rotate } from '../helpers/helper';
 import { NavbarData } from './nav-data';
@@ -17,11 +17,12 @@ interface SideNavToggle {
     rotate,
   ]
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnInit, AfterViewInit {
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
   navData:INavbarData[] = [];
+
   multiple: boolean = false;
   isSuccess: boolean = false;
 
@@ -37,14 +38,20 @@ export class SidenavComponent implements OnInit {
     }
   }
 
-  constructor(public router: Router, private route: ActivatedRoute) { }
+  constructor(public router: Router, private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,) { }
 
   ngOnInit(): void {
     console.log('nav')
-    this.navData = this.helper.getMenuList();
     this.screenWidth = window.innerWidth;
     this.route.params.subscribe((params: Params) => this.isSuccess = params['caller']);
     this.toggleCollapsed(); // set narba show after login
+  }
+
+  public ngAfterViewInit() {
+    this.navData = this.helper.getMenuList();
+    console.log('nav AfterViewInit');
+    this.cd.detectChanges();
   }
 
   toggleCollapsed(): void {

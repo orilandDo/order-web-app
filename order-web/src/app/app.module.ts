@@ -34,6 +34,7 @@ import { NotifyComponent } from './notify/notify.component';
 import { OrderAddComponent } from './orders/order-add/order-add.component';
 import { ToastrModule } from 'ngx-toastr';
 import { WebReqInterceptor } from './services/web-req.interceptor';
+import { HeaderComponent } from './header/header.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -59,6 +60,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DialogConfirmOrderComponent,
     DialogDeleteConfirmComponent,
     NotifyComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

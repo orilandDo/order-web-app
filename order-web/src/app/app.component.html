@@ -1,11 +1,8 @@
-<div id="app-login" [hidden]="isLoginSuccess">
-    <app-login></app-login>
-</div>
-<div id="app-body" [hidden]="!isLoginSuccess">
-    <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
-    <app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth">
-    </app-body>
-    <div class="footer text-center text-xs">
-        &copy;{{'COPY_RIGHT' | translate}}
-    </div>
+<app-sidenav id="app-sidenav" (onToggleSideNav)="onToggleSideNav($event)" *ngIf="loginService.isAuthenticated()"></app-sidenav>
+<app-header id="app-header" [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"
+    *ngIf="loginService.isAuthenticated()"></app-header>
+<app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth">
+</app-body>
+<div class="footer text-center text-xs">
+    &copy;{{'COPY_RIGHT' | translate}}
 </div>

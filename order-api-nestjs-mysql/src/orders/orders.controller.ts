@@ -6,40 +6,41 @@ import { OrdersService } from './orders.service';
 
 @Controller('orders')
 export class OrdersController {
-    constructor(private readonly ordersService: OrdersService) {}
-  
-    @Get()
-    findAll(): Promise<Order[]> {
-      return this.ordersService.findAll()
-    }
-  
-    @Get(':id')
-    get(@Param('id', ParseIntPipe) id: number): Promise<Order> {
-      return this.ordersService.findOne(id);
-    }
-  
-    @Post()
-    create(@Body() createOderDto: ModifyOrderDto) {
-      return this.ordersService.create(createOderDto);
-    }
-  
-    @Put()
-    update(@Body() modifyProductDto: ModifyOrderDto) {
-      return this.ordersService.update(modifyProductDto);
-    }
+  constructor(private readonly ordersService: OrdersService) { }
 
-    @Put('/status')
-    updateStatus(@Body() body) {
-      return this.ordersService.updateStatus(body);
-    }
-  
-    @Delete(':id')
-    deleteUser(@Param('id') id: number) {
-      return this.ordersService.delete(id);
-    }
+  @Get(':userId')
+  findAll(@Param('userId', ParseIntPipe) userId: number): Promise<Order[]> {
+    return this.ordersService.findAll(userId)
+  }
 
-    @Post('/search')
-    search(@Body() searchOderDto: SearchOrderDto): Promise<Order[]> {
-      return this.ordersService.search(searchOderDto);
-    }
+  @Get(':id/:userId')
+  get(@Param('id', ParseIntPipe) id: number,
+  @Param('userId', ParseIntPipe) userId: number,): Promise<Order> {
+    return this.ordersService.findOne(id, userId);
+  }
+
+  @Post()
+  create(@Body() createOderDto: ModifyOrderDto) {
+    return this.ordersService.create(createOderDto);
+  }
+
+  @Put()
+  update(@Body() modifyProductDto: ModifyOrderDto) {
+    return this.ordersService.update(modifyProductDto);
+  }
+
+  @Put('/status')
+  updateStatus(@Body() body) {
+    return this.ordersService.updateStatus(body);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id') id: number) {
+    return this.ordersService.delete(id);
+  }
+
+  @Post('/search')
+  search(@Body() searchOderDto: SearchOrderDto): Promise<Order[]> {
+    return this.ordersService.search(searchOderDto);
+  }
 }

@@ -1,20 +1,22 @@
 #login-container {
-    min-height: 100vh;
-    min-width: 100vw;
+    // min-height: 100vh;
+   // min-width: 100vw;
+    padding: 2rem;
     color: white;
     position: relative;
-    background-color: #e3e2e2;
-    //background-image: url('../../assets/background.png');
+    // background: #e3e2e2;
+    background: whitesmoke;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    max-width: 100%;
 
     .login-body {
         display: flex;
-        justify-content: center;
+        // justify-content: center;
         align-items: center;
         flex-direction: column;
-        min-height: 100vh;
+        // min-height: 100vh;
     }
 
     .logo {
@@ -33,8 +35,9 @@
 
     .login-form {
         text-align: center;
-        padding: 1rem;
+        padding: 1rem 1.25rem 1rem 1rem;
         border-radius: 0.5rem !important;
+        box-shadow: 0 0.25rem 1.5rem lightgrey;
 
         .text-label {
             color: grey;

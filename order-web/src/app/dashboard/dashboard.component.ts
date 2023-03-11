@@ -6,12 +6,12 @@ import { Helper } from '../helpers/helper';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit  {
   
   helper: Helper = new Helper();
 
   ngOnInit() {
-    this.helper.checkSession();
+    //this.helper.checkSession();
   }
 
 }

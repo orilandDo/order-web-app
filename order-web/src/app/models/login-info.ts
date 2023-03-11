@@ -1,5 +1,5 @@
 export interface LoginInfo {
-    id?: number,
+    agencyId?: number,
     accountName: string,
     isAdmin: boolean,
 }

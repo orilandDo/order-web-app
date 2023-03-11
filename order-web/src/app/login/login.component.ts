@@ -1,7 +1,7 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CONFIG } from '../common/config';
-import { Helper, INavbarData } from '../helpers/helper';
+import { Helper } from '../helpers/helper';
 import { LoginService } from '../services/login.service';
 
 @Component({
@@ -24,13 +24,12 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('login')
     // check session
     this.helper.checkSession();
-    const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
-    if (Number(session) === 1) {
-      this.router.navigate([this.navigateComponent]);
-    }
+    //const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
+    // if (Number(session) === 1) {
+    //   this.router.navigate([this.navigateComponent]);
+    // }
   }
 
   validationUsername(): boolean {

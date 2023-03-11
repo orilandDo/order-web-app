@@ -8,7 +8,6 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class LoginService {
     navigateComponent: string = 'dashboard';
-    isSuccess: boolean = false;
     readonly url: string = CONFIG.URL.LOGIN;
     errorSubject: any = new BehaviorSubject<any>(null);
     errorMessage: any = this.errorSubject.asObservable();
@@ -42,11 +41,9 @@ export class LoginService {
                 sessionStorage.setItem(CONFIG.SESSION_STORAGE.DELIVERY_LIST, JSON.stringify(response.data.deliveryList));
                 sessionStorage.setItem(CONFIG.SESSION_STORAGE.AGENCY_LIST, JSON.stringify(response.data.agencyList));
                 sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST, JSON.stringify(response.data.productList));
-                this.isSuccess = true;
                 this.errorSubject.next(null);
                 this.router.navigateByUrl(this.navigateComponent);
             } else if (response.code === 401) {
-                this.isSuccess = false;
                 this.errorSubject.next('Tên đăng nhập hoặc mật khẩu không đúng.');
             }
         });
@@ -54,10 +51,14 @@ export class LoginService {
 
     isAuthenticated(): boolean {
         if (sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT)) {
-            console.log(sessionStorage.getItem('jwt'))
             return true;
         } else {
             return false;
         }
+    }
+
+    logOut() {
+        sessionStorage.clear();
+        this.router.navigate(['']);
     }
 }

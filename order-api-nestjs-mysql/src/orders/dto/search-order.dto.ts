@@ -5,4 +5,5 @@ export class SearchOrderDto {
     startDate?: string;
     endDate?: string;
     status?: number;
+    userId?: number;
 }

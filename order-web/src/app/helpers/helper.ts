@@ -57,16 +57,16 @@ export const rotate = trigger('rotate', [
 export class Helper {
 
   checkSession() {
-    let appLoginId = document.getElementById('app-login');
-    let appBodyId = document.getElementById('app-body');
-    const session = sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT);
-
-    if (session && Number(session) === 1) {
-      appLoginId ? appLoginId.hidden = true : '';
-      appBodyId ? appBodyId.hidden = false : '';
+    let appHeader = document.getElementById('app-header');
+    let appSidenav = document.getElementById('app-sidenav');
+    if (sessionStorage.getItem(CONFIG.SESSION_STORAGE.JWT)) {
+      appHeader ? appHeader.hidden = false : '';
+      appSidenav ? appSidenav.hidden = false : '';
+      return true;
     } else {
-      appLoginId ? appLoginId.hidden = false : '';
-      appBodyId ? appBodyId.hidden = true : '';
+      appHeader ? appHeader.hidden = true : '';
+      appSidenav ? appSidenav.hidden = true : '';
+      return false;
     }
   }
 
@@ -92,6 +92,17 @@ export class Helper {
       return json.accountName;
     }
     return '';
+  }
+
+  getUserId(): number {
+    const info = sessionStorage.getItem(CONFIG.SESSION_STORAGE.LOGIN_INFO);
+    if (info) {
+      const json = JSON.parse(info) as LoginInfo;
+      if (!json.isAdmin) {
+        return Number(json.agencyId);
+      }
+    }
+    return 0;
   }
 
   getMenuList(): INavbarData[] {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Helper } from '../helpers/helper';
 
 @Component({
@@ -9,25 +9,29 @@ import { Helper } from '../helpers/helper';
 export class BodyComponent implements OnInit {
   @Input() collapsed = false;
   @Input() screenWidth = 0;
-  agency: string = '';
   helper = new Helper();
 
-  ngAfterContentInit() {
-    this.agency = this.helper.getInfoName();
-  }
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngAfterViewChecked(){
+    this.cdr.detectChanges();
+ }
 
   ngOnInit(): void { 
-    console.log('body')
+
   }
 
   getBodyClass(): string {
     let styleClass = '';
-    if (this.collapsed && this.screenWidth > 768) {
-      styleClass = 'body-trimmed';
-    } else if (this.collapsed
-      && this.screenWidth <= 768
-      && this.screenWidth > 0) {
-      styleClass = 'body-md-screen';
+    let element = document.getElementById('app-sidenav');
+    if (element) {
+      if (this.collapsed && this.screenWidth > 768) {
+        styleClass = 'body-trimmed';
+      } else if (this.collapsed
+        && this.screenWidth <= 768
+        && this.screenWidth > 0) {
+        styleClass = 'body-md-screen';
+      }
     }
     return styleClass;
   }
