@@ -115,7 +115,7 @@
     </button>
   </div>
   <div class="table-container" #TABLE #table>
-    <table mat-table  [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="dataSource" matSort>
       <!-- Id Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id" class="nowrap">
@@ -166,7 +166,9 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by productName">
           {{'ORDER.PRODUCT' | translate}}</th>
         <td mat-cell class="wrap-text" *matCellDef="let element" class="nowrap">
-          <span *ngFor="let i of element.products">{{i.name}}<br /></span>
+          <span *ngFor="let i of element.products">
+            {{i.name}}<br/>
+          </span>
         </td>
       </ng-container>
 
@@ -174,7 +176,9 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by quantity" class="nowrap">
           {{'ORDER.QUANTITY' | translate}} <br />(tấn)</th>
         <td mat-cell class="wrap-text center" *matCellDef="let element">
-          <span *ngFor="let i of element.products">{{i.quantity}}<br /></span>
+          <span *ngFor="let i of element.products">
+            {{i.quantity}} <br/>
+          </span>
         </td>
       </ng-container>
 
