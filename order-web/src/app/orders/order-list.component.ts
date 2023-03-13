@@ -58,6 +58,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   selectedStatus: any = null;
 
   fileName: string = 'Danh-sach-don-dat-hang.xlsx';
+  hasData: boolean = false;
 
   searchForm: any = {
     orderId: 0,
@@ -93,6 +94,13 @@ export class OrderListComponent implements AfterViewInit, OnInit {
       console.log(response)
       this.helper.setOrderList(response);
       this.dataSource.data = response.length > 0 ? response.reverse() : [];
+
+      // this.dataSource.data = []
+      if (this.dataSource.data.length === 0) {
+        this.hasData = false;
+      } else {
+        this.hasData = true;
+      }
     });
     // } else {
     //   this.dataSource.data = orderList.length > 0 ? orderList.reverse() : [];

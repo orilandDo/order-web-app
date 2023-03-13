@@ -41,6 +41,7 @@ export class LoginService {
                 sessionStorage.setItem(CONFIG.SESSION_STORAGE.DELIVERY_LIST, JSON.stringify(response.data.deliveryList));
                 sessionStorage.setItem(CONFIG.SESSION_STORAGE.AGENCY_LIST, JSON.stringify(response.data.agencyList));
                 sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_LIST, JSON.stringify(response.data.productList));
+                sessionStorage.setItem(CONFIG.SESSION_STORAGE.PRODUCT_SUM, JSON.stringify(response.data.productSum));
                 this.errorSubject.next(null);
                 this.router.navigateByUrl(this.navigateComponent);
             } else if (response.code === 401) {

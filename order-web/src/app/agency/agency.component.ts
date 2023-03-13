@@ -30,6 +30,7 @@ export class AgencyComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   helper = new Helper();
+  hasData: boolean = false;
 
   constructor(public dialog: MatDialog,
     private agencyService: AgencyService,
@@ -51,6 +52,13 @@ export class AgencyComponent implements AfterViewInit, OnInit {
       });
     } else {
       this.dataSource.data = agencyList.reverse();
+    }
+
+    // this.dataSource.data = []
+    if (this.dataSource.data.length === 0) {
+      this.hasData = false;
+    } else {
+      this.hasData = true;
     }
   }
 

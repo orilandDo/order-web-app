@@ -266,6 +266,15 @@ export class Helper {
     return productList;
   }
 
+  getProductSum(): any[] {
+    let productSum: any[] = [];
+    let jsonString = sessionStorage.getItem(CONFIG.SESSION_STORAGE.PRODUCT_SUM);
+    if (jsonString) {
+      productSum = JSON.parse(jsonString);
+    }
+    return productSum;
+  }
+
   updateProduct(obj: any) {
     let productList = this.getProductList();
     if (productList.length > 0) {

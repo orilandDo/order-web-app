@@ -29,6 +29,7 @@ export class AuthService {
             const agency = agencyList.find(x => x.userId === userEntity.id);
             const productList = await this.productService.findAll();
             const admin = userList.find(x => x.isAdmin === true);
+            const productSum = await this.productService.sum(userEntity.isAdmin ? 0 : userEntity.id);
             if (!userEntity.isAdmin) {
                 // Chilay dung du lieu cua user dang nhap
                 agencyList = [agencyList.find(x => x.userId !== admin.id && x.userId === userEntity.id)];
@@ -50,6 +51,7 @@ export class AuthService {
                     deliveryList,
                     agencyList,
                     productList,
+                    productSum,
                     jwt: '1'
                 }
             };

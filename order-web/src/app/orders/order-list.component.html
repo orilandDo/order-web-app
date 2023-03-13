@@ -167,7 +167,7 @@
           {{'ORDER.PRODUCT' | translate}}</th>
         <td mat-cell class="wrap-text" *matCellDef="let element" class="nowrap">
           <span *ngFor="let i of element.products">
-            {{i.name}}<br/>
+            {{i.name}}<br />
           </span>
         </td>
       </ng-container>
@@ -177,7 +177,7 @@
           {{'ORDER.QUANTITY' | translate}} <br />(tấn)</th>
         <td mat-cell class="wrap-text center" *matCellDef="let element">
           <span *ngFor="let i of element.products">
-            {{i.quantity}} <br/>
+            {{i.quantity}} <br />
           </span>
         </td>
       </ng-container>
@@ -236,13 +236,18 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="no-data">
+        <td mat-header-cell *matHeaderCellDef [attr.colspan]="14">
+          {{'MESSAGE.NO_DATA' | translate}}
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <!-- <tr mat-row (click)="clickedRows.add(row)" [class.demo-row-is-clicked]="clickedRows.has(row)"
-        *matRowDef="let row; columns: displayedColumns;"></tr> -->
-      <!-- <tr mat-row (click)="openDialog(row)" *matRowDef="let row; columns: displayedColumns;"></tr> -->
+      <tr mat-row *matHeaderRowDef="['no-data']" class="text-center" [hidden]="hasData"></tr>
       <tr mat-row [class.row-is-clicked]="clickedRows.has(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator *ngIf="hasData" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+      aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>
   <div class="action-export" [hidden]="dataSource.data.length === 0">

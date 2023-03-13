@@ -10,7 +10,7 @@
 
     <div class="pie-chart card">
         <h2>{{'DASHBOARD.PIE_CHART_TITLE' | translate}}</h2>
-        <div style="display: block">
+        <div style="display: block;">
             <canvas class="pie" baseChart [data]="pieChartData" [type]="pieChartType" (chartHover)="chartHovered($event)"
                 (chartClick)="chartClicked($event)" [options]="pieChartOptions" [plugins]="pieChartPlugins">
             </canvas>

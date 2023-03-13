@@ -126,7 +126,7 @@
             </span>
             <mat-radio-group class="col-7" [(ngModel)]="selectedStatus">
                 <mat-radio-button *ngFor="let item of status" [value]="item">
-                    {{item.label}}
+                    {{item.label ? item.label : ''}}
                 </mat-radio-button>
             </mat-radio-group>
         </div>

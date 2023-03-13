@@ -4,12 +4,13 @@ import { Helper } from '../helpers/helper';
 import DatalabelsPlugin from 'chartjs-plugin-datalabels';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { OrderService } from '../services/order.service';
-import { ProductService } from '../services/product.service';
 
 export interface Label { }
 export interface ChartDataSets {
   data: any[];
   label: string;
+  barThickness: number,
+  barPercentage: number,
 }
 
 @Component({
@@ -20,6 +21,7 @@ export interface ChartDataSets {
 export class DashboardComponent implements OnInit {
   helper: Helper = new Helper();
   orderList: any[] = [];
+  productList: any[] = [];
 
   // Bar chart
   public barChartOptions: ChartOptions = {
@@ -54,39 +56,27 @@ export class DashboardComponent implements OnInit {
     // labels: [['Download', 'Sales'], ['In', 'Store', 'Sales'], 'Mail Sales'],
     labels: [],
     datasets: [{
-      // data: [300, 500, 100]
-      data: []
+      data: [],
+      backgroundColor: ['Yellow', 'Green', 'Orange', 'Pink', 'Pink', 'Blue']
     }]
   };
   public pieChartType: ChartType = 'pie';
   public pieChartPlugins = [DatalabelsPlugin];
 
   constructor(private orderService: OrderService,
-    private productService: ProductService,
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    const productList = this.helper.getProductList();
+    const productList = this.helper.getProductSum();
     productList.forEach(el => {
       this.pieChartData.labels?.push(el.name);
-      this.pieChartData.datasets[0].data.push(el.quantity);
+      this.pieChartData.datasets[0].data.push(Number(el.total));
     });
 
     this.orderService.getOrderList().subscribe((response: any) => {
       this.orderList = response;
       this.generateBarChart();
-
     });
-
-    // this.productService.getSumProductOrderList().subscribe((response) => {
-    //   let list = response as [{name: string, total: number}];
-    //   if (list.length > 0) {
-    //     list.forEach(el => {
-    //       this.pieChartData.labels?.push(el.name);
-    //       this.pieChartData.datasets[0].data.push(el.total);
-    //     });
-    //   }
-    // });
   }
 
   generateBarChart() {
@@ -107,29 +97,8 @@ export class DashboardComponent implements OnInit {
 
     setTimeout(() => {
       this.barChartLabels = lb;
-      this.barChartData = [{ data: dt, label: 'Đơn hàng' }];
+      this.barChartData = [{ data: dt, label: 'Đơn hàng', barThickness: 80, barPercentage: 1, }];
     }, 500);
-  }
-
-  
-  generatePieChart(list: any[]) {
-    let labels: any[] = [];
-    let data: any[] = [];
-
-    list.forEach(el => {
-      labels.push(el.name);
-      data.push(el.total);
-    });
-
-    // setTimeout(() => {
-    //   this.pieChartData.labels = labels;
-    //   this.pieChartData.datasets[0].data = data;
-    //   this.pieChartData.datasets[0].backgroundColor = ['Yellow', 'Green', 'Pink', 'Blue'];
-    // }, 1000);
-
-    // this.pieChartData.labels = labels;
-    // this.pieChartData.datasets[0].data = data;
-    // this.pieChartData.datasets[0].backgroundColor = ['Yellow', 'Green', 'Pink', 'Blue'];
   }
 
   count(list: any[]) {
@@ -144,7 +113,6 @@ export class DashboardComponent implements OnInit {
       });
       return Object.values(res);
     };
-    console.log(convert(list));
     return convert(list);
   }
 
@@ -153,10 +121,10 @@ export class DashboardComponent implements OnInit {
   }
 
   public chartClicked(event: any): void {
-    console.log(event);
+    //console.log(event);
   }
 
   public chartHovered(event: any): void {
-    console.log(event);
+    //console.log(event);
   }
 }

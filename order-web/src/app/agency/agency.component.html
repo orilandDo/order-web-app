@@ -13,49 +13,57 @@
 
       <!-- id Column -->
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">{{'AGENCY.ID' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">{{'AGENCY.ID' |
+          translate}}</th>
         <td mat-cell *matCellDef="let element">{{element.id}}</td>
       </ng-container>
 
       <!-- fullName Column -->
       <ng-container matColumnDef="fullName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fullname">{{'AGENCY.NAME' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by fullname">{{'AGENCY.NAME' |
+          translate}}</th>
         <td mat-cell *matCellDef="let element" class="nowrap">{{element.fullName}}</td>
       </ng-container>
 
       <!-- address Column -->
       <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">{{'AGENCY.ADDRESS' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">{{'AGENCY.ADDRESS'
+          | translate}}</th>
         <td mat-cell *matCellDef="let element" class="nowrap">{{element.address}}</td>
       </ng-container>
 
       <!-- phone Column -->
       <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by phone">{{'AGENCY.PHONE' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by phone">{{'AGENCY.PHONE' |
+          translate}}</th>
         <td mat-cell *matCellDef="let element">{{element.phone}}</td>
       </ng-container>
 
       <!-- email Column -->
       <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by email">{{'AGENCY.EMAIL' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by email">{{'AGENCY.EMAIL' |
+          translate}}</th>
         <td mat-cell *matCellDef="let element">{{element.email}}</td>
       </ng-container>
 
       <!-- contract Column -->
       <ng-container matColumnDef="contract">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by contract">{{'AGENCY.CONTRACT' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by contract">
+          {{'AGENCY.CONTRACT' | translate}}</th>
         <td mat-cell *matCellDef="let element">{{element.contract}}</td>
       </ng-container>
 
       <!-- accountName Column -->
       <ng-container matColumnDef="accountName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by accountName">{{'AGENCY.USERNAME' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by accountName">
+          {{'AGENCY.USERNAME' | translate}}</th>
         <td mat-cell *matCellDef="let element">{{element.accountName}}</td>
       </ng-container>
 
       <!-- note Column -->
       <ng-container matColumnDef="note">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by note">{{'AGENCY.NOTE' | translate}}</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by note">{{'AGENCY.NOTE' |
+          translate}}</th>
         <td mat-cell class="wrap-text" *matCellDef="let element">{{element.note}}</td>
       </ng-container>
 
@@ -72,11 +80,18 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="no-data">
+        <td mat-header-cell *matHeaderCellDef [attr.colspan]="9">
+          {{'MESSAGE.NO_DATA' | translate}}
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matHeaderRowDef="['no-data']" class="text-center" [hidden]="hasData"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       <!-- <tr mat-row (click)="openDialog(row)" *matRowDef="let row; columns: displayedColumns;"></tr> -->
     </table>
   </div>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+  <mat-paginator *ngIf="hasData" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
   </mat-paginator>
 </div>

@@ -23,10 +23,12 @@ import { Helper } from '../helpers/helper';
 export class ProductsComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'productName', 'quantity', 'price', 'note', 'deleteAction'];
-  dataSource = new MatTableDataSource<Product>(PRODUCT_DATA);
+  dataSource = new MatTableDataSource<Product>();
   clickedRows = new Set<Product>();
 
   helper = new Helper();
+
+  hasData: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -45,6 +47,12 @@ export class ProductsComponent implements AfterViewInit, OnInit {
       });
     } else {
       this.dataSource.data = productList.length > 0 ? productList.reverse() : [];
+    }
+    // this.dataSource.data = []
+    if (this.dataSource.data.length === 0) {
+      this.hasData = false;
+    } else {
+      this.hasData = true;
     }
   }
 

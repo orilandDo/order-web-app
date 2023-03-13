@@ -71,7 +71,7 @@ export class DialogDetailOrderComponent implements OnInit {
     contract: '',
     products: [],
     agencyId: 0,
-    agencyName: ''
+    agencyName: '',
   };
 
   date = new Date();

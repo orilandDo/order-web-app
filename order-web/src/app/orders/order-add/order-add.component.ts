@@ -60,7 +60,7 @@ export class OrderAddComponent implements OnInit {
     contract: '',
     products: [],
     agencyId: 0,
-    agencyName: ''
+    agencyName: '',
   };
 
   date = new FormControl(new Date());
