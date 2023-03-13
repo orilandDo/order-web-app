@@ -16,7 +16,6 @@ export class OrderService {
     ) { }
 
     getOrderList() {
-        
         return this.webrequestService.get(this.url + `/${this.helper.getUserId()}`);
     }
 

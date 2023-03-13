@@ -4,6 +4,7 @@ export const CONFIG = {
     URL: {
         LOGIN: 'auth/login',
         PRODUCT: 'products',
+        SUM: 'products/sum',
         AGENCY: 'agency',
         ORDERS: {
             ORDER: 'orders',

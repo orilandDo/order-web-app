@@ -12,9 +12,10 @@ import { DeliveryService } from '../delivery/delivery.service';
 import { Delivery } from '../delivery/entities/delivery.entity';
 import { ProductsService } from '../products/products.service';
 import { Product } from '../products/entities/product.entity';
+import { ProductOrder } from '../orders/entities/product-order.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Menu, Agency, Delivery, Product])],
+  imports: [TypeOrmModule.forFeature([Users, Menu, Agency, Delivery, Product, ProductOrder])],
   providers: [AuthService, UserService, MenuService, AgencyService, DeliveryService, ProductsService],
   controllers: [AuthController],
 })

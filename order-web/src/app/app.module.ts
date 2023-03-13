@@ -35,6 +35,7 @@ import { OrderAddComponent } from './orders/order-add/order-add.component';
 import { ToastrModule } from 'ngx-toastr';
 import { WebReqInterceptor } from './services/web-req.interceptor';
 import { HeaderComponent } from './header/header.component';
+import { NgChartsConfiguration, NgChartsModule } from 'ng2-charts';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -71,6 +72,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     MaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgChartsModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
@@ -84,9 +86,12 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       }
     }),
   ],
-  providers: [{ provide: DateAdapter, useClass: DateFormat },
-  { provide: MatPaginatorIntl, useValue: CustomPaginator() },
-  { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true },],
+  providers: [
+    { provide: DateAdapter, useClass: DateFormat },
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() },
+    { provide: HTTP_INTERCEPTORS, useClass: WebReqInterceptor, multi: true },
+    { provide: NgChartsConfiguration, useValue: { generateColors: false } }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as moment from "moment";
+import { ProductOrder } from '../orders/entities/product-order.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ProductDto } from './dto/modify-product.dto';
 import { Product } from './entities/product.entity';
+import { ProductRo } from './ro/product.ro';
+import { Order } from 'src/orders/entities/order.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     public readonly productRepo: Repository<Product>,
+    @InjectRepository(ProductOrder)
+    public readonly productOrderRepo: Repository<ProductOrder>,
   ) { }
 
   async findAll(): Promise<Product[]> {
@@ -66,5 +71,23 @@ export class ProductsService {
     }
     console.log(product)
     return product;
+  }
+
+  async sum(userId: number): Promise<ProductRo[]> {
+    let res: ProductRo[] = [];
+    let sql = this.productOrderRepo
+      .createQueryBuilder('po')
+      .select('SUM(po.quantity)', 'total')
+      .addSelect('p.name', 'name')
+      .leftJoin(Product, 'p', 'p.id = po.product_id')
+      .leftJoin(Order, 'o', 'o.id = po.order_id');
+
+    if (userId !== 0) {
+      sql = sql.where('o.agency_id = :userId', { userId });
+    }
+
+    let query = await sql.groupBy('p.name').getRawMany();
+    res = query;
+    return query;
   }
 }

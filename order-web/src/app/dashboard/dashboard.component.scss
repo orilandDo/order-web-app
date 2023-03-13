@@ -1,4 +1,21 @@
 .container {
     padding: 1rem 2rem;
     display: block;
+
+    .bar-chart {
+        padding: 1.5rem 1rem;
+    }
+
+    .pie-chart {
+        margin: 5rem 0;
+        padding: 1.5rem 1rem;
+
+        .pie {
+            padding-top: 1rem;
+            margin: auto;
+            width: 700px;
+            height: 700px;
+        }
+
+    }
 }

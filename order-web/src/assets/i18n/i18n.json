@@ -7,7 +7,9 @@
         "PASSWORD": "Mật khẩu"
     },
     "DASHBOARD": {
-        "MENU_TITLE": "Trang chủ"
+        "MENU_TITLE": "Trang chủ",
+        "BAR_CHART_TITLE": "Thống kê đơn hàng theo tháng",
+        "PIE_CHART_TITLE": "Thống kê tổng số lượng được đặt của từng loại sản phẩm"
     },
     "ORDER": {
         "MENU_TITLE": "Đơn đặt hàng",

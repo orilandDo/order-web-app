@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CONFIG } from '../common/config';
+import { Helper } from '../helpers/helper';
 import { Product } from '../models/product';
 import { WebRequestService } from './web-request.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
     readonly url: string = CONFIG.URL.PRODUCT;
+    readonly url1: string = CONFIG.URL.SUM;
+    readonly helper = new Helper();
 
     constructor(
         private webrequestService: WebRequestService,
@@ -13,6 +16,10 @@ export class ProductService {
 
     getProductList() {
         return this.webrequestService.get(this.url);
+    }
+
+    getSumProductOrderList() {
+        return this.webrequestService.get(this.url1 + `/${this.helper.getUserId()}`);
     }
 
     getOne(id: number) {

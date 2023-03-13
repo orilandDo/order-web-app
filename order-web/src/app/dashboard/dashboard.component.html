@@ -1,10 +1,19 @@
 <div class="container">
-    <h1>{{'DASHBOARD.MENU_TITLE' | translate}}</h1>
-    <div class="card">
-        <div class="card-head">Lorem ipsum - dashboard</div>
-        <div class="card-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.
+    <div class="bar-chart card">
+        <h2>{{'DASHBOARD.BAR_CHART_TITLE' | translate}}</h2>
+        <div style="display: block;">
+            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                [plugins]="barChartPlugins" [legend]="barChartLegend">
+            </canvas>
+        </div>
+    </div>
+
+    <div class="pie-chart card">
+        <h2>{{'DASHBOARD.PIE_CHART_TITLE' | translate}}</h2>
+        <div style="display: block">
+            <canvas class="pie" baseChart [data]="pieChartData" [type]="pieChartType" (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)" [options]="pieChartOptions" [plugins]="pieChartPlugins">
+            </canvas>
         </div>
     </div>
 </div>

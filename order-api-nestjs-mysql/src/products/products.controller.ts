@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@
 import { ProductDto } from './dto/modify-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
+import { ProductRo } from './ro/product.ro';
 
 @Controller('products')
 export class ProductsController {
@@ -9,7 +10,12 @@ export class ProductsController {
 
   @Get()
   findAll(): Promise<Product[]> {
-    return this.productService.findAll()
+    return this.productService.findAll();
+  }
+
+  @Get('/sum/:userId')
+  sumAll(@Param('userId', ParseIntPipe) userId: number): Promise<ProductRo[]> {
+    return this.productService.sum(userId);
   }
 
   @Get(':id')
