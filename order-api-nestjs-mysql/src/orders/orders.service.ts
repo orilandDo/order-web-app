@@ -121,6 +121,14 @@ export class OrdersService {
       .execute();
   }
 
+  async updateView(body: any) {
+    return await this.orderRepo.createQueryBuilder()
+      .update(Order)
+      .set({ isViewed: body.isViewed })
+      .where("id = :orderId", { orderId: body.id })
+      .execute();
+  }
+
   async delete(id: number): Promise<DeleteResult> {
     await this.productOrderRepo.createQueryBuilder()
       .softDelete()
@@ -182,6 +190,7 @@ export class OrdersService {
     order.note = modifyOrderDto.note;
     order.contract = modifyOrderDto.contract;
     order.agencyId = modifyOrderDto.agencyId;
+    order.isViewed = modifyOrderDto.isViewed;
     console.log(order)
     return order;
   }
@@ -203,6 +212,7 @@ export class OrdersService {
       item.note = el.order_note;
       item.contract = el.order_contract;
       item.products = [];
+      item.isViewed = el.isViewed;
       list1.push(item);
     });
 

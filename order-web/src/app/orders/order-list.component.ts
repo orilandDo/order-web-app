@@ -34,7 +34,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class OrderListComponent implements AfterViewInit, OnInit {
 
-  displayedColumns: string[] = ['id', 'createdDate', 'contract', 'receivedDate', 'deliveryId', 'pickupId', 'productName', 'quantity', 'productTotal', 'licensePlates', 'driver', 'status', 'deleteAction'];
+  displayedColumns: string[] = ['isView', 'id', 'createdDate', 'contract', 'receivedDate', 'deliveryId', 'pickupId', 'productName', 'quantity', 'productTotal', 'licensePlates', 'driver', 'status', 'deleteAction'];
   dataSource = new MatTableDataSource<Order>();
   clickedRows = new Set<Order>();
 
@@ -155,6 +155,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
           row.status = result.status;
           row.products = result.products;
         }
+        row.isView = true;
       });
     }
   }

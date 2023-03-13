@@ -108,6 +108,7 @@ export class DialogDetailOrderComponent implements OnInit {
       this.order.contract = this.data.contract;
       this.order.agencyId = this.data.agencyId;
       this.order.agencyName = this.data.agencyName;
+      this.order.isViewed = true;
       this.statusSelected = this.status.find(x => x.value === this.order.status);
       this.deliverySelected = this.deliveries.find(y => y.id === this.order.deliveryId);
       this.pickupSelected = this.cities.find(y => y.id === this.order.pickupId);
@@ -175,7 +176,10 @@ export class DialogDetailOrderComponent implements OnInit {
   }
 
   onCancel() {
-    this.dialogRef.close(null);
+    this.orderService.updateView(this.order).subscribe((response: any) => {
+      this.dialogRef.close(null);
+    });
+   
   }
 
   focusOut() {

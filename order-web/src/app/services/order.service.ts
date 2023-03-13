@@ -88,6 +88,15 @@ export class OrderService {
         return this.webrequestService.put(this.url + '/status', payload);
     }
 
+    
+    updateView(obj: Order) {
+        const payload = {
+            id: obj.id,
+            isViewed: obj.isViewed,
+        }
+        return this.webrequestService.put(this.url + '/view', payload);
+    }
+
     delete(id: number) {
         return this.webrequestService.delete(this.url + `/${id}`);
     }

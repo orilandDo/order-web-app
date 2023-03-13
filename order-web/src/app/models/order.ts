@@ -19,6 +19,7 @@ export interface Order {
     updatedDate?: string,
     agencyId?: number,
     agencyName?: string,
+    isViewed?: boolean;
 }
 
 export interface ProductItem {

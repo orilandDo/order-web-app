@@ -34,6 +34,11 @@ export class OrdersController {
     return this.ordersService.updateStatus(body);
   }
 
+  @Put('/view')
+  updateView(@Body() body) {
+    return this.ordersService.updateView(body);
+  }
+
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
     return this.ordersService.delete(id);

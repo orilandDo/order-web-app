@@ -18,6 +18,18 @@
         border: 1px solid grey;
         border-bottom: 1.05px solid grey;
         margin-bottom: 20px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .status-icon {
+            padding-top: 8px;
+            padding-right: 8px;
+        }
 
         .wrap-text {
             white-space: break-spaces;
@@ -94,25 +106,48 @@
         cursor: pointer;
     }
 
+    .fa-envelope {
+        text-align: center;
+        padding-top: 8px;
+        margin-right: 4px;
+        color: red;
+        font-size: 18px;
+    }
+
+    .fa-envelope-open {
+        text-align: center;
+        padding-top: 4px;
+        margin-right: 2px;
+        color: gray;
+        font-size: 20px;
+    }
+
     .center {
         text-align: center;
     }
-}
 
-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-
-    .nowrap {
-        white-space: nowrap;
-    }
-
-    .status-icon {
-        padding-top: 8px;
-        padding-right: 8px;
+    .new {
+        color: red;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: auto;
     }
 }
+
+// table {
+//     display: block;
+//     overflow-x: auto;
+//     white-space: nowrap;
+
+//     .nowrap {
+//         white-space: nowrap;
+//     }
+
+//     .status-icon {
+//         padding-top: 8px;
+//         padding-right: 8px;
+//     }
+// }
 
 .action-add {
     margin-top: 2rem;

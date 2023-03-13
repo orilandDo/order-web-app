@@ -20,6 +20,7 @@ export class ModifyOrderDto {
   agencyId?: number;
   agencyName?: string;
   isAdmin?: boolean;
+  isViewed?: boolean;
 }
 
 export interface ProductItem {

@@ -42,4 +42,7 @@ export class Order {
   contract: string;
 
   products?: any[];
+
+  @Column({ name: 'is_viewed', default: false, type: 'tinyint'}) 
+  isViewed: boolean;
 }
