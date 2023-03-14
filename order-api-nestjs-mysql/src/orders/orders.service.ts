@@ -131,7 +131,7 @@ export class OrdersService {
 
   async delete(id: number): Promise<DeleteResult> {
     await this.productOrderRepo.createQueryBuilder()
-      .softDelete()
+      .delete()
       .where("order_id = :id", { id })
       .execute();
     return await this.orderRepo.delete(id);
