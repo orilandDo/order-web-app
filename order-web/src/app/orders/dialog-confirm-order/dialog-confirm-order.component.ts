@@ -100,4 +100,8 @@ export class DialogConfirmOrderComponent implements OnInit {
       }
     });
   }
+
+  onCancel() {
+    this.dialogRef.close(null);
+  }
 }

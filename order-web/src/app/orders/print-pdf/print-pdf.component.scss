@@ -1,0 +1,73 @@
+.container {
+    padding: 1.5rem;
+    margin: 0 !important;
+    width: 100%;
+    min-width: 100%;
+
+    .header {
+        text-align: center;
+        padding: 1.5rem 0;
+    }
+
+    table {
+        width: 100%;
+        border: 1px solid grey;
+        border-bottom: 1.05px solid grey;
+        margin-bottom: 20px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+
+        .nowrap {
+            white-space: pre;
+        }
+
+        .wrap-text {
+            white-space: break-spaces;
+        }
+
+        th {
+            white-space: pre;
+            background: whitesmoke;
+        }
+
+        .th-nowrap {
+            text-align: center;
+            white-space: pre;
+        }
+    }
+
+    .mat-mdc-row .mat-mdc-cell {
+        border-bottom: 1px solid grey;
+        border-top: 1px solid transparent;
+    }
+
+    th.mat-sort-header-sorted {
+        color: black;
+    }
+
+    .center {
+        text-align: center;
+    }
+}
+
+.btn-container {
+    text-align: right;
+    padding-bottom: 5rem;
+    margin-right: 1.5rem;
+
+    .btn-info {
+        color: #fff;
+        background-color: royalblue;
+        border-color: royalblue;
+        text-transform: none;
+    }
+
+    .btn-cancel {
+        color: black;
+        background-color: #dadada;
+        border-color: #dadada;
+        text-transform: none;
+        margin-right: 1rem !important;
+    }
+}

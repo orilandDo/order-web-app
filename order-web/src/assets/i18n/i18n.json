@@ -86,7 +86,8 @@
         "ORDER": "Đặt hàng",
         "NO": "Không",
         "YES": "Có",
-        "DOWNLOAD": "Tải xuống"
+        "DOWNLOAD": "Tải xuống",
+        "PRINT": "In"
     },
     "DIALOG_DELETE": {
         "TITLE": "Xác nhận xóa",

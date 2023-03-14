@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,15 +14,11 @@ import { CustomPaginator } from '../common/custom-paginator';
 import { DeliveryData } from '../mock-data/delivery-data';
 import { PRODUCT_DATA } from '../mock-data/products-data';
 import * as moment from 'moment';
-import { AGENCY_DATA } from '../mock-data/agency-data';
 import { FormControl, FormGroup } from '@angular/forms';
 import { OrderService } from '../services/order.service';
-import { ProductService } from '../services/product.service';
-import { AgencyService } from '../services/agency.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import * as XLSX from 'xlsx';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-order-list',
@@ -40,7 +36,6 @@ export class OrderListComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('TABLE', { static: false }) TABLE!: ElementRef;
 
   cities: any[] = Cities;
   deliveries: any[] = DeliveryData;
@@ -53,12 +48,11 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   agencyList: any[] = [];
   // agencyList: any[] = AGENCY_DATA;
   agencySelected: any = null;
-
   productSelected: any = null;
   selectedStatus: any = null;
 
-  fileName: string = 'Danh-sach-don-dat-hang.xlsx';
   hasData: boolean = false;
+  fileNameExcel: string = 'Danh-sach-don-dat-hang.xlsx';
 
   searchForm: any = {
     orderId: 0,
@@ -78,11 +72,8 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private orderService: OrderService,
-    private productService: ProductService,
-    private agencyService: AgencyService,
     private toastr: ToastrService,
     public translate: TranslateService,
-    protected sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
@@ -181,28 +172,12 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   }
 
   onPrint(row: any) {
-    //var blob = new Blob([row.blob()], { type: 'application/pdf' });
-    // const blobUrl = URL.createObjectURL(blob);
-    //   const iframe = document.createElement('iframe');
-    //   iframe.style.display = 'none';
-    //   iframe.src = blobUrl;
-    //   document.body.appendChild(iframe);
-    //   iframe.contentWindow ? iframe.contentWindow.print() : null;
-
-
-    const pdf = new Blob([row], { type: 'application/pdf' });
-    const blobUrl = URL.createObjectURL(pdf);
-    const iframe = document.createElement('iframe');
-
-    iframe.style.display = 'none';
-    //iframe.src = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl));
-    document.body.appendChild(iframe);
-    iframe.contentWindow ? iframe.contentWindow.print() : null;
+    this.router.navigate(['print'], row);
   }
 
   exportToExcel() {
-    const data = this.dataSource.data.map(c => ({ 
-      'Mã số đơn hàng': c.id, 
+    const data = this.dataSource.data.map(c => ({
+      'Mã số đơn hàng': c.id,
       'Ngày tạo đơn': c.createdDate,
       'Nhà phân phối': this.agencyList.find(x => x.id === c.agencyId)?.fullName,
       'Hợp đồng': c.contract,
@@ -218,8 +193,8 @@ export class OrderListComponent implements AfterViewInit, OnInit {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    wb.Sheets['Sheet1']['H2'].s = {alignment:{ wrapText: true }};
-    XLSX.writeFile(wb, this.fileName);
+    wb.Sheets['Sheet1']['H2'].s = { alignment: { wrapText: true } };
+    XLSX.writeFile(wb, this.fileNameExcel);
   }
 
   getProductName(products: any[]): string {

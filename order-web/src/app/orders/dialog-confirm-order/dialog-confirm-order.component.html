@@ -132,12 +132,12 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-button mat-dialog-close
-            class="btn-cancel py-2 px-4 rounded focus:outline-none focus:shadow-outline">{{(order.status === 4 ||
+        <button mat-button
+            class="btn-cancel py-2 px-4 rounded focus:outline-none focus:shadow-outline" (click)="onCancel()">{{(order.status === 4 ||
             order.status === 3 ? 'BUTTON.CLOSE' : 'BUTTON.CANCEL') | translate}}</button>
-        <button mat-button [mat-dialog-close]="true"
+        <button mat-button
             [hidden]="(data.status === 3 || data.status === 4) ? true : ((data.status === 2 && !isAdmin) ? true : false)"
-            class="btn-save py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button"
+            class="btn-save py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-1" type="button"
             (click)="onSubmit()">{{ 'BUTTON.SAVE' | translate}}</button>
     </mat-dialog-actions>
 </div>

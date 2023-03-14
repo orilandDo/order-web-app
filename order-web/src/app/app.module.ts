@@ -35,7 +35,9 @@ import { OrderAddComponent } from './orders/order-add/order-add.component';
 import { ToastrModule } from 'ngx-toastr';
 import { WebReqInterceptor } from './services/web-req.interceptor';
 import { HeaderComponent } from './header/header.component';
+import { PrintPdfComponent } from './orders/print-pdf/print-pdf.component';
 import { NgChartsConfiguration, NgChartsModule } from 'ng2-charts';
+import { NgxPrintElementModule } from 'ngx-print-element';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -62,6 +64,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DialogDeleteConfirmComponent,
     NotifyComponent,
     HeaderComponent,
+    PrintPdfComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
       timeOut: 3000,
       positionClass: 'toast-top-right',
       closeButton: true,
-    }), // ToastrModule added
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -85,6 +88,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    NgxPrintElementModule,
   ],
   providers: [
     { provide: DateAdapter, useClass: DateFormat },

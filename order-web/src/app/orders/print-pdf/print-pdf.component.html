@@ -1,0 +1,95 @@
+<div class="container" id="pdfTable">
+    <h2 class="header">{{'ORDER.TITLE_DETAIL' | translate}}</h2>
+    <table mat-table [dataSource]="dataSource">
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.ID' | translate}}</th>
+            <td mat-cell *matCellDef="let element" class="center">{{element.id}}</td>
+        </ng-container>
+
+        <!-- createdDate Column -->
+        <ng-container matColumnDef="createdDate">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">{{'ORDER.CREATEDDATE' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element.createdDate}}</td>
+        </ng-container>
+
+        <!-- contract Column -->
+        <ng-container matColumnDef="contract">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.CONTRACT' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let element">{{element.contract}}</td>
+        </ng-container>
+
+        <!-- receivedDate Column -->
+        <ng-container matColumnDef="receivedDate">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">{{'ORDER.RECEIVEDDATE' | translate}}</th>
+            <td mat-cell *matCellDef="let element">{{element.receivedDate}}</td>
+        </ng-container>
+
+        <!-- deliveryId Column -->
+        <ng-container matColumnDef="deliveryId">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.DELIVERY_ADDRESS' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let element">{{compareObj(deliveries, element.deliveryId)}}</td>
+        </ng-container>
+
+        <!-- pickupId Column -->
+        <ng-container matColumnDef="pickupId">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.PICKUP_ADDRESS' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let element">{{compareObj(cities, element.pickupId)}}</td>
+        </ng-container>
+
+        <!-- product Column -->
+        <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.PRODUCT' | translate}}</th>
+            <td mat-cell *matCellDef="let element" class="nowrap">
+                <span *ngFor="let i of element.products" >
+                    {{i.name}}<br />
+                </span>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.QUANTITY' | translate}} <br />(tấn)</th>
+            <td mat-cell class="wrap-text center" *matCellDef="let element">
+                <span *ngFor="let i of element.products">
+                    {{i.quantity}} <br />
+                </span>
+            </td>
+        </ng-container>
+
+        <!-- productTotal Column -->
+        <ng-container matColumnDef="productTotal">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">{{'ORDER.TOTAL' | translate}} (tấn)</th>
+            <td mat-cell *matCellDef="let element" class="center">{{element.productTotal}}</td>
+        </ng-container>
+
+        <!-- licensePlates Column -->
+        <ng-container matColumnDef="licensePlates">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">{{'ORDER.LICENSE_PLATE' | translate}}</th>
+            <td mat-cell *matCellDef="let element" class="center">{{element.licensePlates}}</td>
+        </ng-container>
+        mat
+        <!-- driver Column -->
+        <ng-container matColumnDef="driver">
+            <th mat-header-cell *matHeaderCellDef class="th-nowrap">
+                {{'ORDER.DRIVER' | translate}}</th>
+            <td mat-cell *matCellDef="let element" class="nowrap">{{element.driver}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+<div class="btn-container" id="action">
+    <button mat-button class="btn-cancel btn btn-info m-1"
+    (click)="onCancel()">{{ 'BUTTON.CANCEL' | translate}}</button>
+    <button [print]="['pdfTable', config]" class="btn btn-info m-1">{{ 'BUTTON.PRINT' | translate}}</button>
+</div>
