@@ -35,8 +35,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class OrderListComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['isView', 'id', 'createdDate', 'contract', 'receivedDate', 'deliveryId', 'pickupId', 'productName', 'quantity', 'productTotal', 'licensePlates', 'driver', 'status', 'deleteAction'];
+  colspan: number = 0;
   dataSource = new MatTableDataSource<Order>();
-  clickedRows = new Set<Order>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -86,6 +86,7 @@ export class OrderListComponent implements AfterViewInit, OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.colspan = this.displayedColumns.length;
     this.productList = this.helper.getProductList();
     this.agencyList = this.helper.getAgencyList();
     // const orderList = this.helper.getOrderList();
@@ -155,7 +156,10 @@ export class OrderListComponent implements AfterViewInit, OnInit {
           row.status = result.status;
           row.products = result.products;
         }
-        row.isView = true;
+        const r = this.dataSource.data.find(x => x.id === row.id);
+        if (r) {
+          r.isViewed = true;
+        }
       });
     }
   }

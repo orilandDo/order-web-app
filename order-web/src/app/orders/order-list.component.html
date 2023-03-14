@@ -121,9 +121,9 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="">
         </th>
         <td mat-cell *matCellDef="let element">
-          <mat-icon *ngIf="element.isViewed === 0" aria-hidden="false" fontSet="fas" fontIcon="fa-envelope" class="fa-envelope"></mat-icon>
-          <mat-icon *ngIf="element.isViewed === 1" aria-hidden="false" fontSet="fas" fontIcon="fa-envelope-open" class="fa-envelope-open"></mat-icon>
-          <span class="{{element.isViewed === 0 ? 'new' : ''}}">{{element.isViewed === 1 ? '' : 'Mới'}}</span>
+          <mat-icon *ngIf="!element.isViewed" aria-hidden="false" fontSet="fas" fontIcon="fa-envelope" class="fa-envelope"></mat-icon>
+          <mat-icon *ngIf="element.isViewed" aria-hidden="false" fontSet="fas" fontIcon="fa-envelope-open" class="fa-envelope-open"></mat-icon>
+          <span *ngIf="!element.isViewed" class="{{!element.isViewed ? 'new' : ''}}">{{!element.isViewed ? 'Mới' : ''}}</span>
         </td>
       </ng-container>
 
@@ -131,14 +131,14 @@
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id" class="nowrap">
           {{'ORDER.ID' | translate}}</th>
-        <td mat-cell *matCellDef="let element" class="center">{{element.id}}</td>
+        <td mat-cell *matCellDef="let element" class="center {{element.isViewed === 0 ? 'bold' : ''}}">{{element.id}}</td>
       </ng-container>
 
       <!-- createdDate Column -->
       <ng-container matColumnDef="createdDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by created date"
           class="nowrap">{{'ORDER.CREATEDDATE' | translate}}</th>
-        <td mat-cell *matCellDef="let element">{{element.createdDate}}</td>
+        <td mat-cell *matCellDef="let element" class="{{element.isViewed === 0 ? 'bold' : ''}}">{{element.createdDate}}</td>
       </ng-container>
 
       <!-- contract Column -->
@@ -146,14 +146,14 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by contract" class="nowrap">
           {{'ORDER.CONTRACT' | translate}}
         </th>
-        <td mat-cell *matCellDef="let element">{{element.contract}}</td>
+        <td mat-cell *matCellDef="let element" class="{{element.isViewed === 0 ? 'bold' : ''}}">{{element.contract}}</td>
       </ng-container>
 
       <!-- receivedDate Column -->
       <ng-container matColumnDef="receivedDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by received date"
           class="nowrap">{{'ORDER.RECEIVEDDATE' | translate}}</th>
-        <td mat-cell *matCellDef="let element">{{element.receivedDate}}</td>
+        <td mat-cell *matCellDef="let element" class="{{element.isViewed === 0 ? 'bold' : ''}}">{{element.receivedDate}}</td>
       </ng-container>
 
       <!-- deliveryId Column -->
@@ -161,7 +161,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by deliveryId" class="nowrap">
           {{'ORDER.DELIVERY_ADDRESS' | translate}}
         </th>
-        <td mat-cell *matCellDef="let element">{{compareObj(deliveries, element.deliveryId)}}</td>
+        <td mat-cell *matCellDef="let element" class="{{element.isViewed === 0 ? 'bold' : ''}}">{{compareObj(deliveries, element.deliveryId)}}</td>
       </ng-container>
 
       <!-- pickupId Column -->
@@ -169,7 +169,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pickupId" class="nowrap">
           {{'ORDER.PICKUP_ADDRESS' | translate}}
         </th>
-        <td mat-cell *matCellDef="let element">{{compareObj(cities, element.pickupId)}}</td>
+        <td mat-cell *matCellDef="let element" class="{{element.isViewed === 0 ? 'bold' : ''}}">{{compareObj(cities, element.pickupId)}}</td>
       </ng-container>
 
       <!-- product Column -->
@@ -177,7 +177,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by productName">
           {{'ORDER.PRODUCT' | translate}}</th>
         <td mat-cell class="wrap-text" *matCellDef="let element" class="nowrap">
-          <span *ngFor="let i of element.products">
+          <span *ngFor="let i of element.products" class="{{element.isViewed === 0 ? 'bold' : ''}}">
             {{i.name}}<br />
           </span>
         </td>
@@ -187,7 +187,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by quantity" class="nowrap">
           {{'ORDER.QUANTITY' | translate}} <br />(tấn)</th>
         <td mat-cell class="wrap-text center" *matCellDef="let element">
-          <span *ngFor="let i of element.products">
+          <span *ngFor="let i of element.products" class="{{element.isViewed === 0 ? 'bold' : ''}}">
             {{i.quantity}} <br />
           </span>
         </td>
@@ -197,21 +197,21 @@
       <ng-container matColumnDef="productTotal">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by productTotal"
           class="nowrap">{{'ORDER.TOTAL' | translate}} (tấn)</th>
-        <td mat-cell *matCellDef="let element" class="center">{{element.productTotal}}</td>
+        <td mat-cell *matCellDef="let element" class="center {{element.isViewed === 0 ? 'bold' : ''}}">{{element.productTotal}}</td>
       </ng-container>
 
       <!-- licensePlates Column -->
       <ng-container matColumnDef="licensePlates">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by license plates"
           class="nowrap">{{'ORDER.LICENSE_PLATE' | translate}}</th>
-        <td mat-cell *matCellDef="let element" class="center">{{element.licensePlates}}</td>
+        <td mat-cell *matCellDef="let element" class="center {{element.isViewed === 0 ? 'bold' : ''}}">{{element.licensePlates}}</td>
       </ng-container>
 
       <!-- driver Column -->
       <ng-container matColumnDef="driver">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by driver" class="nowrap">
           {{'ORDER.DRIVER' | translate}}</th>
-        <td mat-cell *matCellDef="let element" class="nowrap">{{element.driver}}</td>
+        <td mat-cell *matCellDef="let element" class="nowrap {{element.isViewed === 0 ? 'bold' : ''}}">{{element.driver}}</td>
       </ng-container>
 
       <!-- status Column -->
@@ -224,7 +224,7 @@
           <mat-icon aria-hidden="false" aria-label="Confirm icon" fontSet="fas"
             fontIcon="{{(element.status === 1 || element.status === 2) ? 'fa-spinner' : (element.status === 4 ? 'fa-xmark' : 'fa-check')}}"
             class="status-icon"></mat-icon>
-          <label class="pad-label">{{(element.status === 1 ? 'ORDER.STATUS_WAITING' : (element.status === 2 ?
+          <label class="pad-label {{element.isViewed === 0 ? 'bold' : ''}}">{{(element.status === 1 ? 'ORDER.STATUS_WAITING' : (element.status === 2 ?
             'ORDER.STATUS_RECEIVING' : (element.status === 3 ? 'ORDER.STATUS_RECEIVED' : 'ORDER.STATUS_CANCEL'))) |
             translate}}</label>
         </td>
@@ -248,14 +248,14 @@
       </ng-container>
 
       <ng-container matColumnDef="no-data">
-        <td mat-header-cell *matHeaderCellDef [attr.colspan]="14">
+        <td mat-header-cell *matHeaderCellDef [attr.colspan]="colspan" class="bold">
           {{'MESSAGE.NO_DATA' | translate}}
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matHeaderRowDef="['no-data']" class="text-center" [hidden]="hasData"></tr>
-      <tr mat-row [class.row-is-clicked]="clickedRows.has(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <mat-paginator *ngIf="hasData" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
       aria-label="Select page of periodic elements">
