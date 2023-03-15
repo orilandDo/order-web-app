@@ -109,11 +109,22 @@ export class DialogDetailOrderComponent implements OnInit {
       this.order.agencyId = this.data.agencyId;
       this.order.agencyName = this.data.agencyName;
       this.order.isViewed = true;
-      this.statusSelected = this.status.find(x => x.value === this.order.status);
-      this.deliverySelected = this.deliveries.find(y => y.id === this.order.deliveryId);
-      this.pickupSelected = this.cities.find(y => y.id === this.order.pickupId);
-      this.transportSelected = this.transport.find(y => y.id === this.order.transport);
-      this.agencySelected = this.agencyList.find(x => x.id === this.order.agencyId);
+      // this.statusSelected = this.status.find(x => x.value === this.order.status);
+      // this.deliverySelected = this.deliveries.find(y => y.id === this.order.deliveryId);
+      // this.pickupSelected = this.cities.find(y => y.id === this.order.pickupId);
+      // this.transportSelected = this.transport.find(y => y.id === this.order.transport);
+      // this.agencySelected = this.agencyList.find(x => x.id === this.order.agencyId);
+
+      const status = this.status.find(x => x.value === this.order.status);
+      this.statusSelected = status ? status : {id: null, label: ''};
+      const delivery = this.deliveries.find(x => x.id === this.order.deliveryId);
+      this.deliverySelected = delivery ? delivery : {id: null, label: ''};
+      const pickup = this.cities.find(x => x.id === this.order.pickupId);
+      this.pickupSelected = pickup ? pickup : {id: null, label: ''};
+      const transport = this.transport.find(x => x.id === this.order.transport);
+      this.transportSelected = transport ? transport : {id: null, label: ''};
+      const agency = this.agencyList.find(x => x.id === this.order.agencyId);
+      this.agencySelected = agency ? agency : {id: null, label: ''};
       this.setProductOrder();
 
       // set valuefor receivedDate picker

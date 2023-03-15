@@ -126,6 +126,10 @@ export class OrderListComponent implements AfterViewInit, OnInit {
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
         this.dataSource.data = this.helper.getOrderList().reverse();
+        const r = this.dataSource.data.find(x => x.id === row.id);
+        if (r) {
+          r.isViewed = true;
+        }
       });
     } else {
       const dialogRef = this.dialog.open(DialogDetailOrderComponent, {

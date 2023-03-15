@@ -116,7 +116,7 @@ export class OrdersService {
   async updateStatus(body: any) {
     return await this.orderRepo.createQueryBuilder()
       .update(Order)
-      .set({ status: body.status })
+      .set({ status: body.status, isViewed: body.isViewed})
       .where("id = :orderId", { orderId: body.id })
       .execute();
   }

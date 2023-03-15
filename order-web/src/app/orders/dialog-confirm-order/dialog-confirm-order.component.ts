@@ -79,10 +79,14 @@ export class DialogConfirmOrderComponent implements OnInit {
       this.order.contract = this.data.contract;
       this.order.agencyId = this.data.agencyId;
       this.order.agencyName = this.agencyList.find(x => x.id === this.data.agencyId).fullName;
-      this.selectedStatus = this.status.find(x => x.value === this.order.status);
-      this.selectedDelivery = this.deliveries.find(x => x.id === this.order.deliveryId);
-      this.selectedPickup = this.cities.find(x => x.id === this.order.pickupId);
-      this.selectedTransport = this.transport.find(x => x.id === this.order.transport);
+      const status = this.status.find(x => x.value === this.order.status);
+      this.selectedStatus = status ? status : {id: null, label: ''};
+      const delivery = this.deliveries.find(x => x.id === this.order.deliveryId);
+      this.selectedDelivery = delivery ? delivery : {id: null, label: ''};
+      const pickup = this.cities.find(x => x.id === this.order.pickupId);
+      this.selectedPickup = pickup ? pickup : {id: null, label: ''};
+      const transport = this.transport.find(x => x.id === this.order.transport);
+      this.selectedTransport = transport ? transport : {id: null, label: ''};
     }
   }
 
